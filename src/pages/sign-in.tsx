@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { House } from '@phosphor-icons/react'
 
-const HomePage = () => {
+const SignInPage = () => {
   const { t } = useTranslation()
 
   return (
@@ -13,4 +13,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default SignInPage

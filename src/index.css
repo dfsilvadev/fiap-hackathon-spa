@@ -11,49 +11,49 @@
     /* Primary - Deep Blue (Trust/Education) */
     --primary: 222 65% 45%;
     --primary-foreground: 0 0% 100%;
-    
+
     /* Secondary - Warm Teal */
     --secondary: 174 60% 45%;
     --secondary-foreground: 0 0% 100%;
-    
+
     /* Success - Green (Progress) */
     --success: 152 55% 45%;
     --success-foreground: 0 0% 100%;
-    
+
     /* Warning - Amber */
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 10%;
-    
+
     /* Background & Foreground */
     --background: 220 20% 98%;
     --foreground: 222 47% 11%;
-    
+
     /* Cards & Surfaces */
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
-    
+
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    
+
     /* Muted */
     --muted: 220 14% 96%;
     --muted-foreground: 220 9% 46%;
-    
+
     /* Accent */
     --accent: 222 65% 96%;
     --accent-foreground: 222 65% 35%;
-    
+
     /* Destructive */
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    
+
     /* Borders & Inputs */
     --border: 220 13% 91%;
     --input: 220 13% 91%;
     --ring: 222 65% 45%;
-    
+
     --radius: 0.625rem;
-    
+
     /* Sidebar */
     --sidebar-background: 222 47% 11%;
     --sidebar-foreground: 220 20% 95%;
@@ -63,18 +63,18 @@
     --sidebar-accent-foreground: 220 20% 95%;
     --sidebar-border: 222 30% 20%;
     --sidebar-ring: 222 65% 55%;
-    
+
     /* Custom Educational Tokens */
     --level-1: 222 65% 50%;
     --level-2: 174 60% 45%;
     --level-3: 152 55% 45%;
     --level-reforco: 38 92% 50%;
-    
+
     --status-completed: 152 55% 45%;
     --status-available: 222 65% 50%;
     --status-blocked: 220 9% 70%;
     --status-recommended: 280 60% 55%;
-    
+
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(222 65% 45%) 0%, hsl(222 65% 35%) 100%);
     --gradient-success: linear-gradient(135deg, hsl(152 55% 45%) 0%, hsl(152 55% 35%) 100%);
@@ -84,35 +84,35 @@
   .dark {
     --primary: 222 65% 60%;
     --primary-foreground: 222 47% 11%;
-    
+
     --secondary: 174 50% 50%;
     --secondary-foreground: 0 0% 10%;
-    
+
     --success: 152 45% 50%;
     --success-foreground: 0 0% 10%;
-    
+
     --background: 222 47% 8%;
     --foreground: 220 20% 95%;
-    
+
     --card: 222 47% 11%;
     --card-foreground: 220 20% 95%;
-    
+
     --popover: 222 47% 11%;
     --popover-foreground: 220 20% 95%;
-    
+
     --muted: 222 30% 15%;
     --muted-foreground: 220 10% 60%;
-    
+
     --accent: 222 30% 18%;
     --accent-foreground: 222 65% 70%;
-    
+
     --destructive: 0 62% 45%;
     --destructive-foreground: 0 0% 100%;
-    
+
     --border: 222 30% 18%;
     --input: 222 30% 18%;
     --ring: 222 65% 60%;
-    
+
     --sidebar-background: 222 47% 6%;
     --sidebar-foreground: 220 20% 95%;
     --sidebar-primary: 222 65% 60%;
@@ -133,8 +133,13 @@
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', system-ui, sans-serif;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
 }
@@ -144,15 +149,15 @@
     @apply bg-card rounded-xl shadow-sm border hover:shadow-md transition-shadow duration-200;
     border-color: hsl(var(--border) / 0.5);
   }
-  
+
   .status-badge {
     @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium;
   }
-  
+
   .level-badge {
     @apply inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold text-white;
   }
-  
+
   .progress-ring {
     @apply relative inline-flex items-center justify-center;
   }
