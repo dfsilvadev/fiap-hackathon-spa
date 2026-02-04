@@ -1,14 +1,66 @@
-import { useTranslation } from 'react-i18next'
-import { House } from '@phosphor-icons/react'
+import { Formik, Form } from 'formik'
+import * as Yup from 'yup'
+import { EnvelopeSimple, LockSimple, WarningCircle } from '@phosphor-icons/react'
+import { InputFormik } from '../components/inputs/inputFormik'
+
+const validationSchema = Yup.object({
+  email: Yup.string().email('E-mail inválido').required('Obrigatório'),
+  password: Yup.string().min(6, 'Senha muito curta').required('Obrigatório'),
+})
 
 const SignInPage = () => {
-  const { t } = useTranslation()
-
+  const hasError = true
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8">
-      <House size={48} weight="duotone" className="text-indigo-600" />
-      <h1 className="mt-4 text-3xl font-bold">{t('welcome')}</h1>
-      <p className="mt-2 text-gray-600">{t('description')}</p>
+      <div className="w-full max-w-[400px]">
+        <header className="mb-8">
+          <h1 className="text-3xl font-bold">Bem-vindo</h1>
+          <p className="mt-2 text-sm text-gray-500">Entre com suas credenciais para continuar</p>
+        </header>
+
+        {hasError && (
+          <div className="rounded-sm border border-red-500 py-2 mb-4 items-center justify-center flex flex-row gap-2 ">
+            <div className="mr-8">
+              <WarningCircle size={32} className="text-red-500" />
+            </div>
+            <div>
+              <p className="text-red-500">Credenciais inválidas.</p>
+              <p className="text-red-500">Verifique seu email e senha.</p>
+            </div>
+          </div>
+        )}
+
+        <Formik
+          initialValues={{ email: '', password: '' }}
+          validationSchema={validationSchema}
+          onSubmit={(values) => console.log(values)}
+        >
+          <Form className="w-full">
+            <InputFormik
+              name="email"
+              label="E-mail"
+              type="email"
+              placeholder="seu@email.com"
+              icon={EnvelopeSimple}
+            />
+
+            <InputFormik
+              name="password"
+              label="Senha"
+              type="password"
+              placeholder="******"
+              icon={LockSimple}
+            />
+
+            <button
+              type="submit"
+              className="w-full mt-4 bg-[#234BB5] hover:bg-[#0c2870] text-white py-3 rounded-sm font-semibold transition-colors"
+            >
+              Entrar
+            </button>
+          </Form>
+        </Formik>
+      </div>
     </main>
   )
 }
