@@ -4,6 +4,6 @@ import type { LoginRequest, LoginResponse, UserAuth } from '../components/ui/aut
 export const sendLogin = (payload: LoginRequest) =>
   post<LoginResponse, LoginRequest>('/auth/login', payload, false)
 
-export const getUserAuth = () => get<UserAuth>('/auth/me', false)
+export const getUserAuth = () => get<UserAuth>('/auth/me', true)
 
 export const sendLogout = () => post<void>('/auth/logout')

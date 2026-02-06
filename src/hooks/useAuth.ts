@@ -19,13 +19,13 @@ const USER_KEY = 'user'
 function safeParseUserAuth(value: string | null): UserAuth | null {
   if (!value) return null
   try {
-    const parsed = JSON.parse(value)
-    if (
-      typeof parsed.sub === 'string' &&
-      typeof parsed.role === 'string' &&
-      typeof parsed.iat === 'number' &&
-      typeof parsed.exp === 'number'
-    ) {
+    let parsed = JSON.parse(value)
+
+    if (parsed.user) {
+      parsed = parsed.user
+    }
+
+    if (typeof parsed.sub === 'string' && typeof parsed.role === 'string') {
       return parsed as UserAuth
     }
     return null
@@ -87,14 +87,22 @@ export function useAuth(): UseAuthReturn {
     localStorage.setItem(TOKEN_KEY, accessToken)
 
     const userAuthResponse = await getUserAuth()
-    const userAuth: UserAuth = userAuthResponse.data
-    const { sub } = userAuth
+
+    const rawData = userAuthResponse.data as unknown as { user: UserAuth }
+
+    const userAuth = rawData.user
+
+    const sub = userAuth.sub
+
+    console.log('Sub extraído:', sub)
 
     localStorage.setItem(USER_AUTH_KEY, JSON.stringify(userAuth))
+    setMe(userAuth)
 
     try {
       const userResponse = await getUserById(sub)
       const userData = userResponse.data
+      console.log('Fetched user data:', userResponse.data)
 
       localStorage.setItem(USER_KEY, JSON.stringify(userData))
       setUser(userData)
