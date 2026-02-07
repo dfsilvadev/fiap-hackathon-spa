@@ -1,8 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom'
+import { RouterProvider } from 'react-router'
 import '@/i18n'
-import { router } from '@/router'
+import router from './router/client'
 import '@/index.css'
 
 createRoot(document.getElementById('root')!).render(
