@@ -6,7 +6,13 @@ const Auth = () => {
     <div className="min-h-screen flex">
       <div className="bg-[#234BB5] w-1/2 flex flex-col justify-between pt-8 pl-8 pb-8 pr-32">
         <div className="flex flex-row">
-          <HorizontalLogo sizeIcon={24} sizeText={20} />
+          <HorizontalLogo
+            sizeIcon={24}
+            sizeText={20}
+            textColor="#FFFFFF"
+            iconColor="#FFFFFF"
+            bgColor="#4F6FC4"
+          />
         </div>
         <div className="flex flex-col gap-6 max-w-3xl">
           <h1 className="text-white text-left text-4xl font-bold">
