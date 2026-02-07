@@ -1,6 +1,6 @@
 import { AssessmentCard } from './assessmentCard'
-import { Assessments } from '../ui/assessment'
-import { formatDate } from '../../util/formatDate'
+import { Assessments } from '../../ui/assessment'
+import { formatDate } from '../../../util/formatDate'
 
 interface AssessmentListProps {
   data: Assessments[]

@@ -9,7 +9,7 @@ import PrivateRoutes from './private'
 import SignInPage from '../pages/sign-in'
 import HomePage from '../pages/HomePage'
 import NotFound from '@/pages/not-found'
-import AssessmentPage from '@/pages/assessments'
+import AssessmentStudentPage from '@/pages/assessments-student'
 
 const router = createBrowserRouter([
   {
@@ -23,8 +23,8 @@ const router = createBrowserRouter([
         element: <PrivateRoutes />,
         children: [
           {
-            path: RoutePaths.ASSESSMENTS.replace('/', ''),
-            element: <AssessmentPage />,
+            path: RoutePaths.ASSESSMENTS_STUDENT.replace('/', ''),
+            element: <AssessmentStudentPage />,
           },
         ],
       },

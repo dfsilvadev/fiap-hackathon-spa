@@ -1,11 +1,11 @@
 import { useState, useMemo, useEffect } from 'react'
 import { MagnifyingGlass } from '@phosphor-icons/react'
-import { AssessmentList } from '../components/assessments/assessmentList'
+import { AssessmentList } from '../components/assessments/student/assessmentList'
 import { categories } from '../constant/category'
 import { getAll } from '@/resources/assessmentResources'
 import { Assessments } from '../components/ui/assessment'
 
-const AssessmentPage = () => {
+const AssessmentStudentPage = () => {
   const [activeCategory, setActiveCategory] = useState('Todos')
   const [search, setSearch] = useState('')
   const [assessmentsData, setAssessmentsData] = useState<Assessments[]>([])
@@ -94,4 +94,4 @@ const AssessmentPage = () => {
   )
 }
 
-export default AssessmentPage
+export default AssessmentStudentPage

@@ -38,7 +38,13 @@ const RolesRoutes: MenuItem[] = [
   {
     label: 'Avaliações',
     path: Routes.ASSESSMENTS,
-    roles: ['student', 'teacher', 'coordinator'],
+    roles: ['teacher', 'coordinator'],
+    icon: ClipboardText,
+  },
+  {
+    label: 'Avaliações',
+    path: Routes.ASSESSMENTS_STUDENT,
+    roles: ['student'],
     icon: ClipboardText,
   },
   { label: 'Recomendações', path: '/recomendacoes', roles: ['student'], icon: Lightbulb },

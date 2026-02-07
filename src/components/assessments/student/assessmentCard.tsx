@@ -1,5 +1,5 @@
 import { Clock, Target, CaretRight } from '@phosphor-icons/react'
-import { categoryConfig } from '../../constant/category'
+import { categoryConfig } from '../../../constant/category'
 
 interface AssessmentCardProps {
   title: string
@@ -29,7 +29,6 @@ export const AssessmentCard = ({
       onClick={onClick}
       className="bg-white border border-gray-100 rounded-md shadow-sm hover:shadow-md transition-all cursor-pointer group flex flex-col h-full overflow-hidden"
     >
-      {/* 1. Área de Conteúdo com Padding */}
       <div className="p-6 flex-1 flex flex-col">
         <div className="flex items-center gap-2">
           <span
