@@ -3,6 +3,8 @@ import type { User } from '../components/ui/user'
 import type { LoginResponse, UserAuth } from '../components/ui/auth'
 import { getUserAuth, sendLogout } from '@/resources/authResources'
 import { getUserById } from '@/resources/userResources'
+import { useNavigate } from 'react-router'
+import { Routes } from '../router/constants/routesMap'
 
 type UseAuthReturn = {
   isLoggedIn: boolean
@@ -75,58 +77,67 @@ function safeParseUser(value: string | null): User | null {
 }
 
 export function useAuth(): UseAuthReturn {
+  const navigate = useNavigate()
   const [isLoggedIn, setIsLoggedIn] = useState(() => !!localStorage.getItem(TOKEN_KEY))
   const [me, setMe] = useState<UserAuth | null>(() =>
     safeParseUserAuth(localStorage.getItem(USER_AUTH_KEY))
   )
   const [user, setUser] = useState<User | null>(() => safeParseUser(localStorage.getItem(USER_KEY)))
 
-  const login = useCallback(async (response: LoginResponse) => {
-    const { accessToken } = response
+  const login = useCallback(
+    async (response: LoginResponse) => {
+      const { accessToken } = response
 
-    localStorage.setItem(TOKEN_KEY, accessToken)
+      localStorage.setItem(TOKEN_KEY, accessToken)
 
-    const userAuthResponse = await getUserAuth()
+      const userAuthResponse = await getUserAuth()
 
-    const rawData = userAuthResponse.data as unknown as { user: UserAuth }
+      const rawData = userAuthResponse.data as unknown as { user: UserAuth }
 
-    const userAuth = rawData.user
+      const userAuth = rawData.user
 
-    const sub = userAuth.sub
+      const sub = userAuth.sub
 
-    console.log('Sub extraído:', sub)
+      console.log('Sub extraído:', sub)
 
-    localStorage.setItem(USER_AUTH_KEY, JSON.stringify(userAuth))
-    setMe(userAuth)
+      localStorage.setItem(USER_AUTH_KEY, JSON.stringify(userAuth))
+      setMe(userAuth)
 
-    try {
-      const userResponse = await getUserById(sub)
-      const userData = userResponse.data
-      console.log('Fetched user data:', userResponse.data)
+      try {
+        const userResponse = await getUserById(sub)
+        const userData = userResponse.data
+        console.log('Fetched user data:', userResponse.data)
 
-      localStorage.setItem(USER_KEY, JSON.stringify(userData))
-      setUser(userData)
-    } catch (error) {
-      console.error('Failed to fetch user data:', error)
-      setUser(null)
-    }
+        localStorage.setItem(USER_KEY, JSON.stringify(userData))
+        setUser(userData)
+        navigate(Routes.HOME)
+      } catch (error) {
+        console.error('Failed to fetch user data:', error)
+        setUser(null)
+      }
 
-    setIsLoggedIn(true)
-  }, [])
+      setIsLoggedIn(true)
+    },
+    [navigate]
+  )
 
   const logout = useCallback(async () => {
     try {
       await sendLogout()
     } catch (error) {
       console.error('Failed to send logout:', error)
+    } finally {
+      localStorage.removeItem(TOKEN_KEY)
+      localStorage.removeItem(USER_AUTH_KEY)
+      localStorage.removeItem(USER_KEY)
+
+      setUser(null)
+      setMe(null)
+      setIsLoggedIn(false)
+
+      navigate(Routes.SIGN_IN)
     }
-    localStorage.removeItem(TOKEN_KEY)
-    localStorage.removeItem(USER_AUTH_KEY)
-    localStorage.removeItem(USER_KEY)
-    setUser(null)
-    setIsLoggedIn(false)
-    window.location.reload()
-  }, [])
+  }, [navigate])
 
   useEffect(() => {
     const handleStorage = (e: StorageEvent) => {

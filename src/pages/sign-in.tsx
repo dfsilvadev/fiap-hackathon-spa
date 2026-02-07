@@ -1,12 +1,10 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
-import { Routes } from '../router/constants/routesMap'
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup'
 import { EnvelopeSimple, LockSimple, WarningCircle } from '@phosphor-icons/react'
 import { InputFormik } from '../components/inputs/inputFormik'
-import { useAuth } from '../hooks/useAuth' // Import useAuth
-import { sendLogin } from '../resources/authResources' // Import sendLogin
+import { useAuth } from '../hooks/useAuth'
+import { sendLogin } from '../resources/authResources'
 
 const validationSchema = Yup.object({
   email: Yup.string().email('E-mail inválido').required('Obrigatório'),
@@ -15,8 +13,7 @@ const validationSchema = Yup.object({
 
 const SignInPage = () => {
   const [hasError, setHasError] = useState(false)
-  const { login } = useAuth() // Get the login function from useAuth
-  const navigate = useNavigate() // For redirection after login
+  const { login } = useAuth()
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8">
@@ -47,7 +44,6 @@ const SignInPage = () => {
               const response = await sendLogin(values)
               console.log('Login successful:', response.data)
               login(response.data)
-              return navigate(Routes.HOME)
             } catch (error) {
               console.error('Login failed:', error)
               setHasError(true)
