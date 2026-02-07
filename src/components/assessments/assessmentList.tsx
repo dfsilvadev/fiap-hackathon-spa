@@ -1,0 +1,34 @@
+import { AssessmentCard } from './assessmentCard'
+import { Assessments } from '../ui/assessment'
+import { formatDate } from '../../util/formatDate'
+
+interface AssessmentListProps {
+  data: Assessments[]
+}
+
+export const AssessmentList = ({ data }: AssessmentListProps) => {
+  if (data.length === 0) {
+    return (
+      <div className="mt-10 py-20 text-center bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
+        <p className="text-gray-400 italic">Nenhuma avaliação encontrada.</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {data.map((item) => (
+        <AssessmentCard
+          key={item.id}
+          category={item.category?.name || 'Geral'}
+          title={item.title}
+          description={item.description || 'Sem descrição disponível.'}
+          level={item.level}
+          minScore={item.minScore ? String(item.minScore) : '0'}
+          startDate={formatDate(item.startDate)}
+          endDate={item.endDate ? formatDate(item.endDate) : 'Sem data de término'}
+        />
+      ))}
+    </div>
+  )
+}
