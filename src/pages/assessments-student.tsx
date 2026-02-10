@@ -1,11 +1,14 @@
 import { useState, useMemo, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { MagnifyingGlass } from '@phosphor-icons/react'
 import { AssessmentList } from '../components/assessments/student/assessmentList'
 import { categories } from '../constant/category'
 import { getAll } from '@/resources/assessmentResources'
 import { Assessments } from '../components/ui/assessment'
+import { Routes } from '../router/constants/routesMap'
 
 const AssessmentStudentPage = () => {
+  const navigate = useNavigate()
   const [activeCategory, setActiveCategory] = useState('Todos')
   const [search, setSearch] = useState('')
   const [assessmentsData, setAssessmentsData] = useState<Assessments[]>([])
@@ -16,9 +19,7 @@ const AssessmentStudentPage = () => {
       try {
         setLoading(true)
         const response = await getAll()
-
         const data = (response.data as unknown as { assessments: Assessments[] }).assessments || []
-
         setAssessmentsData(data)
       } catch (error) {
         console.error('Erro ao buscar avaliações:', error)
@@ -30,10 +31,13 @@ const AssessmentStudentPage = () => {
     fetchAssessments()
   }, [])
 
+  const handleStartAssessment = (id: string) => {
+    navigate(Routes.QUESTION.replace(':id', id))
+  }
+
   const filteredAssessments = useMemo(() => {
     return assessmentsData.filter((item) => {
       const matchesCategory = activeCategory === 'Todos' || item.category?.name === activeCategory
-
       const title = item.title || ''
       const matchesSearch = title.toLowerCase().includes(search.toLowerCase())
 
@@ -87,7 +91,7 @@ const AssessmentStudentPage = () => {
             Buscando avaliações no servidor...
           </div>
         ) : (
-          <AssessmentList data={filteredAssessments} />
+          <AssessmentList data={filteredAssessments} onStartItem={handleStartAssessment} />
         )}
       </section>
     </main>

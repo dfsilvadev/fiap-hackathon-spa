@@ -10,6 +10,7 @@ import SignInPage from '../pages/sign-in'
 import HomePage from '../pages/HomePage'
 import NotFound from '@/pages/not-found'
 import AssessmentStudentPage from '@/pages/assessments-student'
+import QuestionPage from '@/pages/question'
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
           {
             path: RoutePaths.ASSESSMENTS_STUDENT.replace('/', ''),
             element: <AssessmentStudentPage />,
+          },
+          {
+            path: RoutePaths.QUESTION.replace('/', ''),
+            element: <QuestionPage />,
           },
         ],
       },

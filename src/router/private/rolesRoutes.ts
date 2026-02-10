@@ -16,7 +16,7 @@ interface MenuItem {
   label: string
   path: string
   roles: UserRole[]
-  icon: Icon // Tipagem específica do Phosphor
+  icon: Icon
 }
 
 const RolesRoutes: MenuItem[] = [

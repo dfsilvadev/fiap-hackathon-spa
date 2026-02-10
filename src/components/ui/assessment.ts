@@ -11,3 +11,38 @@ export interface Assessments {
   endDate: Date | null
   category?: Category | undefined
 }
+
+export interface AssessmentDetail extends Assessments {
+  questions: Question[]
+}
+
+export interface Question {
+  id: string
+  questionText: string
+  questionType: string
+  options: unknown[]
+  points: number
+  tags: string[]
+  orderNumber: number
+}
+
+export interface MultipleChoice {
+  id: number
+  text: string
+}
+
+export interface AnswerItem {
+  questionId: string
+  answerText: string
+}
+
+export interface SubmitAssessmentPayload {
+  answers: AnswerItem[]
+}
+
+export interface AssessmentResult {
+  totalScore: number
+  maxScore: number
+  percentage: number
+  levelUpdated: boolean
+}
