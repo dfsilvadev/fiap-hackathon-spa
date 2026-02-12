@@ -6,11 +6,12 @@ import BaseLayout from '../layout/base'
 import { Routes as RoutePaths } from './constants/routesMap'
 import PrivateRoutes from './private'
 
-import SignInPage from '../pages/sign-in'
-import HomePage from '../pages/HomePage'
-import NotFound from '@/pages/not-found'
 import AssessmentStudentPage from '@/pages/assessments-student'
+import NotFound from '@/pages/not-found'
 import QuestionPage from '@/pages/question'
+import RecommendationsPage from '@/pages/recommendations'
+import HomePage from '../pages/HomePage'
+import SignInPage from '../pages/sign-in'
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
           {
             path: RoutePaths.QUESTION.replace('/', ''),
             element: <QuestionPage />,
+          },
+          {
+            path: RoutePaths.RECOMMENDATIONS.replace('/', ''),
+            element: <RecommendationsPage />,
           },
         ],
       },
