@@ -1,19 +1,19 @@
-import { useParams, useNavigate } from 'react-router-dom'
-import { CaretLeft, PaperPlaneTilt, CheckCircle, XCircle } from '@phosphor-icons/react'
-import { useEffect, useState } from 'react'
+import { CaretLeft, CheckCircle, PaperPlaneTilt, XCircle } from '@phosphor-icons/react'
+import { useCallback, useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import {
   AssessmentDetail,
-  Question,
-  MultipleChoice,
-  SubmitAssessmentPayload,
   AssessmentResult,
-  QuestionWithResult,
   AssessmentResultDetail,
+  MultipleChoice,
+  Question,
+  QuestionWithResult,
+  SubmitAssessmentPayload,
 } from '../components/ui/assessment'
 
-import { getById, submitAssessment, getResultById } from '../resources/assessmentResources'
 import { AssessmentFeedback } from '../components/assessments/feedback/assessmentFeedback'
+import { getById, getResultById, submitAssessment } from '../resources/assessmentResources'
 import { Routes } from '../router/constants/routesMap'
 
 type QuestionState = Question | QuestionWithResult
@@ -37,11 +37,7 @@ const QuestionPage = () => {
   const [isReviewMode, setIsReviewMode] = useState(false)
   const [scoreSummary, setScoreSummary] = useState<{ total: number; max: number } | null>(null)
 
-  useEffect(() => {
-    fetchData()
-  }, [id])
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (!id) return
     try {
       setLoading(true)
@@ -55,7 +51,11 @@ const QuestionPage = () => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [id])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   const handleCloseFeedbackAndLoadResults = async () => {
     if (!id) return
