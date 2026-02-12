@@ -55,7 +55,7 @@ export const AssessmentFeedback = ({ result, title, onConfirm }: FeedbackProps) 
           onClick={onConfirm}
           className="w-full flex items-center justify-center gap-2 bg-slate-900 hover:bg-blue-600 text-white font-bold py-4 rounded-2xl transition-all shadow-lg active:scale-95"
         >
-          Ir para avaliações
+          Ver resultados detalhados
           <ArrowRight size={20} weight="bold" />
         </button>
       </div>

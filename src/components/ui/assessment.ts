@@ -46,3 +46,33 @@ export interface AssessmentResult {
   percentage: number
   levelUpdated: boolean
 }
+
+export interface AssessmentResultDetail {
+  result: {
+    totalScore: number
+    maxScore: number
+    percentage: number
+    levelUpdated: boolean
+    completedAt: string
+  }
+  assessment: {
+    id: string
+    title: string
+    description: string
+    category: {
+      id: string
+      name: string
+    }
+    level: string
+  }
+  questions: QuestionWithResult[]
+}
+
+export interface QuestionWithResult extends Question {
+  correctAnswer: string
+  studentAnswer: {
+    answerText: string
+    isCorrect: boolean
+    pointsEarned: number
+  }
+}
