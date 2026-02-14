@@ -9,6 +9,7 @@ import HomeRedirect from './HomeRedirect'
 
 import AssessmentStudentPage from '@/pages/assessments-student'
 import DashboardProfessorPage from '@/pages/dashboard-professor'
+import DashboardStudentPage from '@/pages/dashboard-student'
 import NotFound from '@/pages/not-found'
 import QuestionPage from '@/pages/question'
 import RecommendationsPage from '@/pages/recommendations'
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
           {
             path: RoutePaths.DASHBOARD.replace('/', ''),
             element: <DashboardProfessorPage />,
+          },
+          {
+            path: RoutePaths.DASHBOARD_STUDENT.replace('/', ''),
+            element: <DashboardStudentPage />,
           },
           {
             path: RoutePaths.ASSESSMENTS_STUDENT.replace('/', ''),

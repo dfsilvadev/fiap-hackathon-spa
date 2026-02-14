@@ -4,6 +4,7 @@ const Routes = {
   PERFIL: '/perfil',
 
   DASHBOARD: '/dashboard',
+  DASHBOARD_STUDENT: '/dashboard/aluno',
   STUDENT_TRIALS: '/minhas-trilhas',
   USERS: '/usuarios',
   CONTENTS: '/conteudos',

@@ -8,7 +8,12 @@ const HomeRedirect = () => {
   const isProfessorOrCoordinator =
     isLoggedIn && me && (me.role === 'teacher' || me.role === 'coordinator')
 
-  return <Navigate to={isProfessorOrCoordinator ? RoutePaths.DASHBOARD : RoutePaths.HOME} replace />
+  return (
+    <Navigate
+      to={isProfessorOrCoordinator ? RoutePaths.DASHBOARD : RoutePaths.DASHBOARD_STUDENT}
+      replace
+    />
+  )
 }
 
 export default HomeRedirect
