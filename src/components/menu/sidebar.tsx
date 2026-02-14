@@ -3,6 +3,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { RolesRoutes, UserRole } from '../../router/private/rolesRoutes'
 import HorizontalLogo from '../logo/horizontalLogo'
 import { UserCircle, SignOut } from '@phosphor-icons/react'
+import { Routes } from '../../router/constants/routesMap'
 
 const Sidebar = () => {
   const navigate = useNavigate()
@@ -53,20 +54,28 @@ const Sidebar = () => {
         </div>
 
         {me && (
-          <div className="flex items-center gap-3 p-5 border-t border-gray-200 bg-gray-50/50">
+          <button
+            className="flex items-center gap-3 w-full p-4 border-t border-gray-200 bg-gray-50/50 hover:bg-gray-100 transition-colors"
+            onClick={() => navigate(Routes.PERFIL)}
+          >
             <div className="text-gray-400 flex-shrink-0">
               <UserCircle size={40} weight="light" />
             </div>
-            <div className="flex flex-col min-w-0">
-              <p className="text-sm font-semibold text-gray-900 truncate">
+
+            <div className="flex flex-col items-start min-w-0 text-left">
+              <p className="text-sm font-bold text-gray-900 truncate w-full leading-tight">
                 {user?.name || 'Usuário'}
               </p>
-              <p className="text-[11px] lowercase text-gray-500 truncate">{user?.email}</p>
-              <span className="mt-1 w-fit px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-blue-700 bg-blue-100 rounded">
+
+              <p className="text-[11px] lowercase text-gray-500 truncate w-full leading-tight">
+                {user?.email}
+              </p>
+
+              <span className="mt-1.5 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-blue-700 bg-blue-100 rounded">
                 {me.role}
               </span>
             </div>
-          </div>
+          </button>
         )}
 
         <div className="px-5 pb-5 border-t border-gray-200">

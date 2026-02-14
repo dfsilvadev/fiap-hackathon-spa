@@ -1,6 +1,7 @@
 const Routes = {
   HOME: '/home',
   SIGN_IN: '/sign-in',
+  PERFIL: '/perfil',
 
   DASHBOARD: '/dashboard',
   STUDENT_TRIALS: '/minhas-trilhas',
@@ -8,9 +9,9 @@ const Routes = {
   CONTENTS: '/conteudos',
   TRIALS: '/trilhas',
 
-  ASSESSMENTS: '/assessments',
-  ASSESSMENTS_STUDENT: '/assessments/student',
-  QUESTION: '/assessments/student/:id',
+  ASSESSMENTS: '/avaliacoes',
+  ASSESSMENTS_STUDENT: '/avaliacoes/estudante',
+  QUESTION: '/avaliacoes/estudante/:id',
 
   RECOMMENDATIONS: '/recomendacoes',
 

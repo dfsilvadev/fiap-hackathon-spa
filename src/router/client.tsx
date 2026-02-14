@@ -12,8 +12,9 @@ import DashboardProfessorPage from '@/pages/dashboard-professor'
 import NotFound from '@/pages/not-found'
 import QuestionPage from '@/pages/question'
 import RecommendationsPage from '@/pages/recommendations'
-import HomePage from '../pages/HomePage'
-import SignInPage from '../pages/sign-in'
+import HomePage from '@/pages/homePage'
+import SignInPage from '@/pages/sign-in'
+import ProfilePage from '@/pages/profilePage'
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
           {
             path: RoutePaths.RECOMMENDATIONS.replace('/', ''),
             element: <RecommendationsPage />,
+          },
+          {
+            path: RoutePaths.PERFIL.replace('/', ''),
+            element: <ProfilePage />,
           },
         ],
       },
