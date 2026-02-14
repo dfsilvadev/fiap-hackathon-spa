@@ -3,12 +3,14 @@ import { Outlet } from 'react-router'
 
 const Base = () => {
   return (
-    <div className="flex">
-      <Sidebar />
+    <div className="flex min-h-screen">
+      <aside className="w-64 flex-shrink-0">
+        <Sidebar />
+      </aside>
 
-      <div className="flex-1 ml-64 min-h-screen bg-[#f8fafc]">
+      <main className="flex-grow">
         <Outlet />
-      </div>
+      </main>
     </div>
   )
 }
