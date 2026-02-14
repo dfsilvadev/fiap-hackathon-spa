@@ -5,7 +5,7 @@ import {
   Icon,
   Lightbulb,
   Path,
-  UsersThree,
+  UsersIcon,
 } from '@phosphor-icons/react'
 import { Routes } from '../constants/routesMap'
 
@@ -53,7 +53,7 @@ const RolesRoutes: MenuItem[] = [
     label: 'Usuários',
     path: Routes.USERS,
     roles: ['teacher', 'coordinator'],
-    icon: UsersThree,
+    icon: UsersIcon,
   },
   {
     label: 'Conteúdos',

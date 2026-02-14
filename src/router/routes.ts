@@ -4,8 +4,8 @@ import { Routes } from './constants/routesMap'
 
 export default [
   layout('../layout/base.tsx', [
-    index('../pages/HomePage.tsx'),
-    route(Routes.HOME.replace('/', ''), '../pages/HomePage.tsx'),
+    index('../pages/homePage.tsx'),
+    route(Routes.HOME.replace('/', ''), '../pages/homePage.tsx'),
   ]),
 
   layout('../layout/auth.tsx', [route(Routes.SIGN_IN.replace('/', ''), '../pages/sign-in.tsx')]),
