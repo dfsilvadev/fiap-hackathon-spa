@@ -3,7 +3,6 @@ import {
   ClipboardText,
   House,
   Icon,
-  Kanban,
   Lightbulb,
   Path,
   UsersThree,
@@ -33,28 +32,10 @@ const RolesRoutes: MenuItem[] = [
     icon: Path,
   },
   {
-    label: 'Usuários',
-    path: Routes.USERS,
-    roles: ['teacher', 'coordinator'],
-    icon: UsersThree,
-  },
-  {
-    label: 'Conteúdos',
+    label: 'Conteúdo',
     path: Routes.CONTENTS,
-    roles: ['student', 'teacher', 'coordinator'],
+    roles: ['student'],
     icon: BookOpen,
-  },
-  {
-    label: 'Trilhas',
-    path: Routes.TRIALS,
-    roles: ['teacher', 'coordinator'],
-    icon: Kanban,
-  },
-  {
-    label: 'Avaliações',
-    path: Routes.ASSESSMENTS,
-    roles: ['teacher', 'coordinator'],
-    icon: ClipboardText,
   },
   {
     label: 'Avaliações',
@@ -67,6 +48,30 @@ const RolesRoutes: MenuItem[] = [
     path: Routes.RECOMMENDATIONS,
     roles: ['student'],
     icon: Lightbulb,
+  },
+  {
+    label: 'Usuários',
+    path: Routes.USERS,
+    roles: ['teacher', 'coordinator'],
+    icon: UsersThree,
+  },
+  {
+    label: 'Conteúdos',
+    path: Routes.CONTENTS,
+    roles: ['teacher', 'coordinator'],
+    icon: BookOpen,
+  },
+  {
+    label: 'Trilhas',
+    path: Routes.TRIALS,
+    roles: ['teacher', 'coordinator'],
+    icon: Path,
+  },
+  {
+    label: 'Avaliações',
+    path: Routes.ASSESSMENTS,
+    roles: ['teacher', 'coordinator'],
+    icon: ClipboardText,
   },
 ]
 

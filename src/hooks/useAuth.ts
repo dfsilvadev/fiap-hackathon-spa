@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback } from 'react'
-import type { User } from '../components/ui/user'
-import type { LoginResponse, UserAuth } from '../components/ui/auth'
 import { getUserAuth, sendLogout } from '@/resources/authResources'
 import { getUserById } from '@/resources/userResources'
+import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
+import type { LoginResponse, UserAuth } from '../components/ui/auth'
+import type { User } from '../components/ui/user'
 import { Routes } from '../router/constants/routesMap'
 
 type UseAuthReturn = {
@@ -36,13 +36,6 @@ function safeParseUserAuth(value: string | null): UserAuth | null {
   }
 }
 
-type Guardian = {
-  name: string
-  email: string
-  phone: string
-  relationship: string
-}
-
 function safeParseUser(value: string | null): User | null {
   if (!value) return null
   try {
@@ -51,22 +44,7 @@ function safeParseUser(value: string | null): User | null {
       typeof parsed.id === 'string' &&
       typeof parsed.name === 'string' &&
       typeof parsed.email === 'string' &&
-      typeof parsed.role === 'string' &&
-      typeof parsed.roleId === 'string' &&
-      typeof parsed.isActive === 'boolean' &&
-      typeof parsed.createdAt === 'string' &&
-      typeof parsed.updatedAt === 'string' &&
-      (parsed.dateOfBirth === null || typeof parsed.dateOfBirth === 'string') &&
-      (parsed.currentGrade === null || typeof parsed.currentGrade === 'string') &&
-      (parsed.phone === null || typeof parsed.phone === 'string') &&
-      Array.isArray(parsed.guardians) &&
-      parsed.guardians.every(
-        (g: Guardian) =>
-          typeof g.name === 'string' &&
-          typeof g.email === 'string' &&
-          typeof g.phone === 'string' &&
-          typeof g.relationship === 'string'
-      )
+      typeof parsed.role === 'string'
     ) {
       return parsed as User
     }
@@ -110,7 +88,12 @@ export function useAuth(): UseAuthReturn {
 
         localStorage.setItem(USER_KEY, JSON.stringify(userData))
         setUser(userData)
-        navigate(Routes.HOME)
+        const role = userAuth?.role
+        if (role === 'teacher' || role === 'coordinator') {
+          navigate(Routes.DASHBOARD)
+        } else {
+          navigate(Routes.HOME)
+        }
       } catch (error) {
         console.error('Failed to fetch user data:', error)
         setUser(null)
