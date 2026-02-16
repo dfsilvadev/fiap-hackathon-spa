@@ -1,17 +1,14 @@
 import { createBrowserRouter, Navigate } from 'react-router'
-
 import AuthLayout from '../layout/auth'
 import BaseLayout from '../layout/base'
-
 import { Routes as RoutePaths } from './constants/routesMap'
 import PrivateRoutes from './private'
-
-import AssessmentStudentPage from '@/pages/assessments-student'
-import NotFound from '@/pages/not-found'
-import QuestionPage from '@/pages/question'
-import RecommendationsPage from '@/pages/recommendations'
 import HomePage from '../pages/HomePage'
 import SignInPage from '../pages/sign-in'
+import RecommendationsPage from '@/pages/recommendations'
+import ContentsPage from '@/pages/ContentsPage'
+import ContentReadingPage from '@/pages/ContentReadingPage'
+import NotFound from '@/pages/not-found'
 
 const router = createBrowserRouter([
   {
@@ -24,18 +21,10 @@ const router = createBrowserRouter([
       {
         element: <PrivateRoutes />,
         children: [
-          {
-            path: RoutePaths.ASSESSMENTS_STUDENT.replace('/', ''),
-            element: <AssessmentStudentPage />,
-          },
-          {
-            path: RoutePaths.QUESTION.replace('/', ''),
-            element: <QuestionPage />,
-          },
-          {
-            path: RoutePaths.RECOMMENDATIONS.replace('/', ''),
-            element: <RecommendationsPage />,
-          },
+          { path: RoutePaths.RECOMMENDATIONS.replace('/', ''), element: <RecommendationsPage /> },
+          { path: RoutePaths.CONTENTS.replace('/', ''), element: <ContentsPage /> },
+          // AQUI ESTÁ A CORREÇÃO: Registrando a rota de detalhes para aceitar o ID
+          { path: 'conteudos/:id', element: <ContentReadingPage /> },
         ],
       },
     ],

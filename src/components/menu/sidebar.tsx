@@ -1,86 +1,49 @@
-import { useNavigate, useLocation } from 'react-router'
-import { useAuth } from '../../hooks/useAuth'
-import { RolesRoutes, UserRole } from '../../router/private/rolesRoutes'
-import HorizontalLogo from '../logo/horizontalLogo'
-import { UserCircle, SignOut } from '@phosphor-icons/react'
+import { Link, useLocation } from 'react-router-dom'
+import { RolesRoutes } from '@/router/private/rolesRoutes'
+import { SignOut } from '@phosphor-icons/react'
 
-const Sidebar = () => {
-  const navigate = useNavigate()
+export default function Sidebar() {
   const location = useLocation()
-  const { user, me, logout } = useAuth()
-
-  const filteredLinks = RolesRoutes.filter((item) => {
-    if (!me?.role) return false
-    return item.roles.includes(me.role as UserRole)
-  })
 
   return (
-    <div className="flex">
-      <aside className="fixed top-0 left-0 h-screen w-64 bg-white border-r border-gray-100 text-[#4B5563] flex flex-col">
-        <div className="my-6 pb-4 border-b border-gray-150 px-5">
-          <HorizontalLogo
-            sizeIcon={24}
-            sizeText={20}
-            textColor="#000"
-            iconColor="#FFFFFF"
-            bgColor="#2563EB"
-          />
-        </div>
-
-        <div className="px-5 flex-grow overflow-y-auto">
-          <nav className="space-y-1">
-            {filteredLinks.map((link) => {
-              const isActive = location.pathname === link.path
-              const IconComponent = link.icon
-
-              return (
-                <button
-                  key={link.path}
-                  onClick={() => navigate(link.path)}
-                  className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 font-medium text-sm
-                    ${
-                      isActive
-                        ? 'bg-[#2563EB] text-white'
-                        : 'text-gray-500 hover:bg-blue-50 hover:text-[#2563EB]'
-                    }`}
-                >
-                  <IconComponent size={22} weight={isActive ? 'fill' : 'regular'} />
-                  {link.label}
-                </button>
-              )
-            })}
-          </nav>
-        </div>
-
-        {me && (
-          <div className="flex items-center gap-3 p-5 border-t border-gray-200 bg-gray-50/50">
-            <div className="text-gray-400 flex-shrink-0">
-              <UserCircle size={40} weight="light" />
-            </div>
-            <div className="flex flex-col min-w-0">
-              <p className="text-sm font-semibold text-gray-900 truncate">
-                {user?.name || 'Usuário'}
-              </p>
-              <p className="text-[11px] lowercase text-gray-500 truncate">{user?.email}</p>
-              <span className="mt-1 w-fit px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-blue-700 bg-blue-100 rounded">
-                {me.role}
-              </span>
-            </div>
+    <div className="flex h-full flex-col bg-white border-r border-slate-200">
+      <div className="p-6">
+        <div className="flex items-center gap-3 px-2">
+          <div className="h-8 w-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold">
+            E
           </div>
-        )}
-
-        <div className="px-5 pb-5 border-t border-gray-200">
-          <button
-            onClick={() => logout()}
-            className="w-full flex items-center gap-3 p-3 text-red-500 hover:bg-red-50 rounded-lg transition-colors font-semibold text-sm mt-2"
-          >
-            <SignOut size={24} weight="bold" />
-            <span>Sair da conta</span>
-          </button>
+          <span className="text-xl font-bold text-slate-900">EduPlatform</span>
         </div>
-      </aside>
+      </div>
+
+      <nav className="flex-1 px-4 space-y-1">
+        {RolesRoutes.map((item) => {
+          const isActive = location.pathname === item.path
+          const Icon = item.icon
+
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                isActive
+                  ? 'bg-blue-50 text-blue-700'
+                  : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+              }`}
+            >
+              <Icon size={20} weight={isActive ? 'fill' : 'regular'} />
+              {item.label}
+            </Link>
+          )
+        })}
+      </nav>
+
+      <div className="p-4 border-t border-slate-100">
+        <button className="flex w-full items-center gap-3 px-3 py-2.5 text-sm font-semibold text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+          <SignOut size={20} weight="bold" />
+          Sair da conta
+        </button>
+      </div>
     </div>
   )
 }
-
-export default Sidebar
