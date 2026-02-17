@@ -7,6 +7,7 @@ const Routes = {
   STUDENT_TRIALS: '/minhas-trilhas',
   USERS: '/usuarios',
   CONTENTS: '/conteudos',
+  CONTENT_DETAILS: '/conteudos/:id',
   TRIALS: '/trilhas',
 
   ASSESSMENTS: '/avaliacoes',
@@ -14,7 +15,6 @@ const Routes = {
   QUESTION: '/avaliacoes/estudante/:id',
 
   RECOMMENDATIONS: '/recomendacoes',
-
   NOT_FOUND: '*',
 } as const
 

@@ -9,14 +9,14 @@ import {
 } from '@phosphor-icons/react'
 import { Routes } from '../constants/routesMap'
 
-export type UserRole = 'student' | 'teacher' | 'coordinator'
-
-interface MenuItem {
+export interface MenuItem {
   label: string
   path: string
-  roles: UserRole[]
-  icon: Icon
+  roles: string[]
+  icon: Icon // Define o tipo como Icon para remover o erro de lint
 }
+
+export type UserRole = 'student' | 'teacher' | 'coordinator'
 
 const RolesRoutes: MenuItem[] = [
   {
