@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import ReactMarkdown from 'react-markdown'
 import { CaretLeft, ListBullets, CheckCircle, Article } from '@phosphor-icons/react'
 import { contentService, Content } from '@/services/contentService'
 
@@ -168,22 +169,94 @@ export default function ContentReadingPage() {
                           className="prose prose-sm max-w-none text-slate-700"
                           dangerouslySetInnerHTML={{ __html: section.html }}
                         />
-                      ) : (
-                        <p className="whitespace-pre-wrap">{section.markdown}</p>
-                      )}
+                      ) : section.markdown ? (
+                        <div className="content-markdown">
+                          <ReactMarkdown
+                            components={{
+                              img: ({ src, alt }) => (
+                                <img
+                                  src={src}
+                                  alt={alt ?? ''}
+                                  className="max-w-full h-auto rounded-xl my-3 border border-slate-200"
+                                />
+                              ),
+                            }}
+                          >
+                            {section.markdown}
+                          </ReactMarkdown>
+                        </div>
+                      ) : null}
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-slate-600 leading-relaxed text-sm whitespace-pre-wrap">
-                  {content.longDescription ?? content.contentText}
-                </p>
+                <div className="content-markdown text-slate-600 text-sm leading-relaxed">
+                  <ReactMarkdown
+                    components={{
+                      p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>,
+                      h1: ({ children }) => (
+                        <h1 className="text-xl font-bold text-slate-900 mt-6 mb-2 first:mt-0">
+                          {children}
+                        </h1>
+                      ),
+                      h2: ({ children }) => (
+                        <h2 className="text-lg font-semibold text-slate-900 mt-5 mb-2">
+                          {children}
+                        </h2>
+                      ),
+                      h3: ({ children }) => (
+                        <h3 className="text-base font-semibold text-slate-900 mt-4 mb-2">
+                          {children}
+                        </h3>
+                      ),
+                      ul: ({ children }) => (
+                        <ul className="list-disc pl-6 mb-3 space-y-1">{children}</ul>
+                      ),
+                      ol: ({ children }) => (
+                        <ol className="list-decimal pl-6 mb-3 space-y-1">{children}</ol>
+                      ),
+                      li: ({ children }) => <li className="mb-0.5">{children}</li>,
+                      a: ({ href, children }) => (
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline"
+                        >
+                          {children}
+                        </a>
+                      ),
+                      img: ({ src, alt }) => (
+                        <img
+                          src={src}
+                          alt={alt ?? ''}
+                          className="max-w-full h-auto rounded-xl my-3 border border-slate-200"
+                        />
+                      ),
+                      strong: ({ children }) => (
+                        <strong className="font-semibold text-slate-800">{children}</strong>
+                      ),
+                      code: ({ children }) => (
+                        <code className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-800 text-[0.9em]">
+                          {children}
+                        </code>
+                      ),
+                      pre: ({ children }) => (
+                        <pre className="overflow-x-auto rounded-xl bg-slate-100 p-4 my-3 text-sm border border-slate-200">
+                          {children}
+                        </pre>
+                      ),
+                    }}
+                  >
+                    {content.contentText ?? content.longDescription ?? ''}
+                  </ReactMarkdown>
+                </div>
               )}
             </section>
 
             {tagList.length > 0 && (
               <section className="pt-4 border-t border-slate-100">
-                <p className="text-xs font-semibold text-slate-500 mb-2 uppercase">
+                <p className="text-xs font-semibold text-slate-500 mb-2 uppercase tracking-wide">
                   Tags relacionadas
                 </p>
                 <div className="flex flex-wrap gap-2">

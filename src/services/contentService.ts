@@ -1,4 +1,4 @@
-import { get, patch } from '@/lib/axios'
+import { get, patch, post } from '@/lib/axios'
 
 export interface ContentAuthor {
   name: string
@@ -75,11 +75,60 @@ export interface Content {
   relatedContents?: Array<
     Pick<Content, 'id' | 'slug' | 'title' | 'coverImageUrl' | 'type' | 'level'>
   >
+
+  // Gestão (professor/coordenador) – listagem GET /contents
+  userId?: string
+  isActive?: boolean
+  createdAt?: string
+  updatedAt?: string
+  glossary?: Record<string, unknown> | null
+  accessibilityMetadata?: Record<string, unknown> | null
 }
 
 interface ContentsResponse {
   contents: Content[]
   total: number
+}
+
+/** Query params para listagem de conteúdos (professor/coordenador) */
+export interface ContentsListParams {
+  categoryId?: string
+  grade?: string
+  level?: string
+  isActive?: boolean
+  page?: number
+  limit?: number
+}
+
+/** Payload de criação de conteúdo – POST /contents */
+export interface CreateContentPayload {
+  title: string
+  contentText: string
+  categoryId: string
+  grade: string
+  level: string
+  topics?: Record<string, ContentTopic> | Record<string, unknown>
+  glossary?: Record<string, unknown>
+  accessibilityMetadata?: Record<string, unknown>
+  tags?: string[]
+}
+
+/** Payload de edição – PATCH /contents/:id (todos opcionais) */
+export interface UpdateContentPayload {
+  title?: string
+  contentText?: string
+  grade?: string
+  level?: string
+  topics?: Record<string, ContentTopic> | Record<string, unknown>
+  glossary?: Record<string, unknown>
+  accessibilityMetadata?: Record<string, unknown>
+  tags?: string[]
+}
+
+export interface CategoryDto {
+  id: string
+  name: string
+  description?: string
 }
 
 export type ProgressAvailabilityStatus = 'blocked' | 'available' | 'completed'
@@ -171,5 +220,59 @@ export const contentService = {
   getProgressByCategory: async (categoryId: string) => {
     const response = await get<CategoryProgressResponse>('/progress', true, { categoryId })
     return response.data
+  },
+
+  // ----- Gestão (professor/coordenador) -----
+
+  /**
+   * Listagem de conteúdos para professor/coordenador.
+   * GET /contents?categoryId=&grade=&level=&isActive=&page=&limit=
+   * Professor vê só conteúdos das matérias que leciona; coordenador vê todos.
+   */
+  getContents: async (params?: ContentsListParams) => {
+    const query: Record<string, string | number | boolean> = {}
+    if (params?.categoryId) query.categoryId = params.categoryId
+    if (params?.grade) query.grade = params.grade
+    if (params?.level) query.level = params.level
+    if (params?.isActive !== undefined) query.isActive = params.isActive
+    if (params?.page !== undefined) query.page = params.page
+    if (params?.limit !== undefined) query.limit = params.limit
+    const response = await get<ContentsResponse>('/contents', true, query)
+    return response.data
+  },
+
+  /**
+   * Categorias/matérias – para filtros e select no formulário.
+   * GET /categories (se o backend expuser). Caso contrário use getTeacherSubjects para professor.
+   */
+  getCategories: async () => {
+    const response = await get<CategoryDto[]>('/categories', true)
+    return Array.isArray(response.data) ? response.data : []
+  },
+
+  /**
+   * Criar conteúdo – POST /contents.
+   * 403 se professor tentar criar para matéria que não leciona.
+   */
+  createContent: async (body: CreateContentPayload) => {
+    const response = await post<Content, CreateContentPayload>('/contents', body, true)
+    return response.data
+  },
+
+  /**
+   * Atualizar conteúdo – PATCH /contents/:id.
+   * 403 se sem permissão sobre a matéria do conteúdo.
+   */
+  updateContent: async (id: string, body: UpdateContentPayload) => {
+    const response = await patch<Content, UpdateContentPayload>(`/contents/${id}`, body, true)
+    return response.data
+  },
+
+  /**
+   * Ativar/desativar conteúdo (soft delete) – PATCH /contents/:id/active.
+   * Resposta 204 sem body.
+   */
+  setContentActive: async (id: string, isActive: boolean) => {
+    await patch<unknown, { isActive: boolean }>(`/contents/${id}/active`, { isActive }, true)
   },
 }

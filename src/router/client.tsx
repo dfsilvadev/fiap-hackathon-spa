@@ -6,8 +6,10 @@ import PrivateRoutes from './private'
 import HomeRedirect from './HomeRedirect'
 
 import AssessmentStudentPage from '@/pages/assessments-student'
-import ContentsPage from '@/pages/ContentsPage'
+import ContentsSwitch from '@/pages/ContentsSwitch'
 import ContentReadingPage from '@/pages/ContentReadingPage'
+import ContentCreatePage from '@/pages/ContentCreatePage'
+import ContentEditPage from '@/pages/ContentEditPage'
 import DashboardProfessorPage from '@/pages/dashboard-professor'
 import NotFound from '@/pages/not-found'
 import QuestionPage from '@/pages/question'
@@ -15,6 +17,9 @@ import RecommendationsPage from '@/pages/recommendations'
 import HomePage from '@/pages/HomePage'
 import SignInPage from '@/pages/sign-in'
 import ProfilePage from '@/pages/ProfilePage'
+import UsersListPage from '@/pages/UsersListPage'
+import UserCreatePage from '@/pages/UserCreatePage'
+import UserEditPage from '@/pages/UserEditPage'
 
 const router = createBrowserRouter([
   {
@@ -32,6 +37,18 @@ const router = createBrowserRouter([
             element: <DashboardProfessorPage />,
           },
           {
+            path: RoutePaths.USERS.replace('/', ''),
+            element: <UsersListPage />,
+          },
+          {
+            path: RoutePaths.USERS_NEW.replace('/', ''),
+            element: <UserCreatePage />,
+          },
+          {
+            path: RoutePaths.USERS_EDIT.replace('/', '').replace(/^\//, ''),
+            element: <UserEditPage />,
+          },
+          {
             path: RoutePaths.ASSESSMENTS_STUDENT.replace('/', ''),
             element: <AssessmentStudentPage />,
           },
@@ -40,12 +57,20 @@ const router = createBrowserRouter([
             element: <QuestionPage />,
           },
           {
-            path: RoutePaths.CONTENTS.replace('/', ''),
-            element: <ContentsPage />,
+            path: RoutePaths.CONTENTS_NEW.replace('/', ''),
+            element: <ContentCreatePage />,
+          },
+          {
+            path: RoutePaths.CONTENTS_EDIT.replace('/', '').replace(/^\//, ''),
+            element: <ContentEditPage />,
           },
           {
             path: RoutePaths.CONTENT_DETAILS.replace('/', '').replace(/^\//, ''),
             element: <ContentReadingPage />,
+          },
+          {
+            path: RoutePaths.CONTENTS.replace('/', ''),
+            element: <ContentsSwitch />,
           },
           {
             path: RoutePaths.RECOMMENDATIONS.replace('/', ''),

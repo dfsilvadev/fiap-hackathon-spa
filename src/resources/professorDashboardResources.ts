@@ -1,4 +1,5 @@
 import { get } from '@/lib/axios'
+import type { Guardian } from '@/components/ui/user'
 
 export interface LevelBySubject {
   categoryId: string
@@ -21,6 +22,12 @@ export interface ProfessorDashboardStudent {
   currentGrade: string
   levelsBySubject: LevelBySubject[]
   pendingRecommendations: PendingRecommendationSummary[]
+  /**
+   * Campos cadastrais trazidos pela rota de dashboard
+   * para evitar chamadas extras a /users/:id
+   */
+  dateOfBirth?: string | null
+  guardians?: Guardian[]
 }
 
 export interface ProfessorDashboardSubject {
