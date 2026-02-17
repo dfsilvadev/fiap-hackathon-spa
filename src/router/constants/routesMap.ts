@@ -1,16 +1,20 @@
 const Routes = {
-  HOME: 'home', // Removido '/'
-  SIGN_IN: 'sign-in',
-  DASHBOARD: 'dashboard',
-  STUDENT_TRIALS: 'minhas-trilhas',
-  USERS: 'usuarios',
-  CONTENTS: 'conteudos', // Removido '/'
-  CONTENT_DETAILS: 'conteudos/:id',
-  TRIALS: 'trilhas',
-  ASSESSMENTS: 'assessments',
-  ASSESSMENTS_STUDENT: 'assessments/student',
-  QUESTION: 'assessments/student/:id',
-  RECOMMENDATIONS: 'recomendacoes',
+  HOME: '/home',
+  SIGN_IN: '/sign-in',
+  PERFIL: '/perfil',
+
+  DASHBOARD: '/dashboard',
+  STUDENT_TRIALS: '/minhas-trilhas',
+  USERS: '/usuarios',
+  CONTENTS: '/conteudos',
+  CONTENT_DETAILS: '/conteudos/:id',
+  TRIALS: '/trilhas',
+
+  ASSESSMENTS: '/avaliacoes',
+  ASSESSMENTS_STUDENT: '/avaliacoes/estudante',
+  QUESTION: '/avaliacoes/estudante/:id',
+
+  RECOMMENDATIONS: '/recomendacoes',
   NOT_FOUND: '*',
 } as const
 
