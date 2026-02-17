@@ -6,7 +6,11 @@ const Routes = {
   DASHBOARD: '/dashboard',
   STUDENT_TRIALS: '/minhas-trilhas',
   USERS: '/usuarios',
+  USERS_NEW: '/usuarios/novo',
+  USERS_EDIT: '/usuarios/:id',
   CONTENTS: '/conteudos',
+  CONTENTS_NEW: '/conteudos/novo',
+  CONTENTS_EDIT: '/conteudos/:id/editar',
   CONTENT_DETAILS: '/conteudos/:id',
   TRIALS: '/trilhas',
 
