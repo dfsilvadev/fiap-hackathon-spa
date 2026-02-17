@@ -5,6 +5,10 @@ import { Routes as RoutePaths } from './constants/routesMap'
 import PrivateRoutes from './private'
 import HomeRedirect from './HomeRedirect'
 
+import AssessmentCreatePage from '@/pages/AssessmentCreatePage'
+import AssessmentEditPage from '@/pages/AssessmentEditPage'
+import AssessmentQuestionsPage from '@/pages/AssessmentQuestionsPage'
+import AssessmentsListPage from '@/pages/AssessmentsListPage'
 import AssessmentStudentPage from '@/pages/assessments-student'
 import ContentsSwitch from '@/pages/ContentsSwitch'
 import ContentReadingPage from '@/pages/ContentReadingPage'
@@ -17,6 +21,10 @@ import RecommendationsPage from '@/pages/recommendations'
 import HomePage from '@/pages/HomePage'
 import SignInPage from '@/pages/sign-in'
 import ProfilePage from '@/pages/ProfilePage'
+import PathCreatePage from '@/pages/PathCreatePage'
+import PathDetailPage from '@/pages/PathDetailPage'
+import PathEditPage from '@/pages/PathEditPage'
+import PathsListPage from '@/pages/PathsListPage'
 import UsersListPage from '@/pages/UsersListPage'
 import UserCreatePage from '@/pages/UserCreatePage'
 import UserEditPage from '@/pages/UserEditPage'
@@ -53,8 +61,24 @@ const router = createBrowserRouter([
             element: <AssessmentStudentPage />,
           },
           {
-            path: RoutePaths.QUESTION.replace('/', ''),
+            path: RoutePaths.QUESTION.replace('/', '').replace(/^\//, ''),
             element: <QuestionPage />,
+          },
+          {
+            path: RoutePaths.ASSESSMENTS_NEW.replace('/', ''),
+            element: <AssessmentCreatePage />,
+          },
+          {
+            path: RoutePaths.ASSESSMENTS_EDIT.replace('/', '').replace(/^\//, ''),
+            element: <AssessmentEditPage />,
+          },
+          {
+            path: RoutePaths.ASSESSMENTS_QUESTIONS.replace('/', '').replace(/^\//, ''),
+            element: <AssessmentQuestionsPage />,
+          },
+          {
+            path: RoutePaths.ASSESSMENTS.replace('/', ''),
+            element: <AssessmentsListPage />,
           },
           {
             path: RoutePaths.CONTENTS_NEW.replace('/', ''),
@@ -79,6 +103,22 @@ const router = createBrowserRouter([
           {
             path: RoutePaths.PERFIL.replace('/', ''),
             element: <ProfilePage />,
+          },
+          {
+            path: RoutePaths.TRIALS_NEW.replace('/', ''),
+            element: <PathCreatePage />,
+          },
+          {
+            path: RoutePaths.TRIALS_EDIT.replace('/', '').replace(/^\//, ''),
+            element: <PathEditPage />,
+          },
+          {
+            path: RoutePaths.TRIALS_DETAIL.replace('/', '').replace(/^\//, ''),
+            element: <PathDetailPage />,
+          },
+          {
+            path: RoutePaths.TRIALS.replace('/', ''),
+            element: <PathsListPage />,
           },
         ],
       },
