@@ -22,7 +22,13 @@ const RolesRoutes: MenuItem[] = [
   {
     label: 'Dashboard',
     path: Routes.DASHBOARD,
-    roles: ['student', 'teacher', 'coordinator'],
+    roles: ['teacher', 'coordinator'],
+    icon: House,
+  },
+  {
+    label: 'Dashboard',
+    path: Routes.DASHBOARD_STUDENT,
+    roles: ['student'],
     icon: House,
   },
   {

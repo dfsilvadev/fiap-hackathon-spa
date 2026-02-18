@@ -12,8 +12,6 @@ export interface Content {
 
 const contentsBase = '/contents'
 
-export const getContents = () => 
-  get<Content[]>(contentsBase, true)
+export const getContents = () => get<Content[]>(contentsBase, true)
 
-export const getContentById = (id: string) => 
-  get<Content>(`${contentsBase}/${id}`, true)
+export const getContentById = (id: string) => get<Content>(`${contentsBase}/${id}`, true)

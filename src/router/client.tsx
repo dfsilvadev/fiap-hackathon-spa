@@ -15,12 +15,13 @@ import ContentReadingPage from '@/pages/ContentReadingPage'
 import ContentCreatePage from '@/pages/ContentCreatePage'
 import ContentEditPage from '@/pages/ContentEditPage'
 import DashboardProfessorPage from '@/pages/dashboard-professor'
+import DashboardStudentPage from '@/pages/dashboard-student'
 import NotFound from '@/pages/not-found'
 import QuestionPage from '@/pages/question'
 import RecommendationsPage from '@/pages/recommendations'
-import HomePage from '@/pages/HomePage'
+import HomePage from '@/pages/homePage'
 import SignInPage from '@/pages/sign-in'
-import ProfilePage from '@/pages/ProfilePage'
+import ProfilePage from '@/pages/profilePage'
 import PathCreatePage from '@/pages/PathCreatePage'
 import PathDetailPage from '@/pages/PathDetailPage'
 import PathEditPage from '@/pages/PathEditPage'
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
           {
             path: RoutePaths.DASHBOARD.replace('/', ''),
             element: <DashboardProfessorPage />,
+          },
+          {
+            path: RoutePaths.DASHBOARD_STUDENT.replace('/', ''),
+            element: <DashboardStudentPage />,
           },
           {
             path: RoutePaths.USERS.replace('/', ''),
