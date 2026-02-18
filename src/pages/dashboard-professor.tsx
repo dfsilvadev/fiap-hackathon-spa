@@ -197,14 +197,16 @@ const DashboardProfessorPage = () => {
                 ))}
               </select>
             </div>
-            <button
-              type="button"
-              onClick={() => navigate(Routes.USERS)}
-              className="inline-flex h-11 items-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              <Plus size={20} weight="bold" />
-              Novo Usuário
-            </button>
+            {me?.role === 'coordinator' && (
+              <button
+                type="button"
+                onClick={() => navigate(Routes.USERS)}
+                className="inline-flex h-11 items-center gap-2 rounded-xl bg-blue-600 px-5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                <Plus size={20} weight="bold" />
+                Novo Usuário
+              </button>
+            )}
           </div>
         </header>
 

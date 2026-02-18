@@ -1,19 +1,18 @@
 import { useNavigate, useLocation } from 'react-router'
-import { useAuth } from '../../hooks/useAuth'
-import { RolesRoutes, UserRole } from '../../router/private/rolesRoutes'
-import HorizontalLogo from '../logo/horizontalLogo'
 import { UserCircle, SignOut } from '@phosphor-icons/react'
+import { useAuth } from '../../hooks/useAuth'
+import HorizontalLogo from '../logo/horizontalLogo'
 import { Routes } from '../../router/constants/routesMap'
+import { RolesRoutes, UserRole } from '../../router/private/rolesRoutes'
 
-const Sidebar = () => {
+export default function Sidebar() {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, me, logout } = useAuth()
 
-  const filteredLinks = RolesRoutes.filter((item) => {
-    if (!me?.role) return false
-    return item.roles.includes(me.role as UserRole)
-  })
+  const filteredLinks = RolesRoutes.filter((link) =>
+    me ? link.roles.includes(me.role as UserRole) : false
+  )
 
   return (
     <div className="flex">
@@ -91,5 +90,3 @@ const Sidebar = () => {
     </div>
   )
 }
-
-export default Sidebar
