@@ -6,7 +6,6 @@ import {
   AssessmentDetail,
   AssessmentResult,
   AssessmentResultDetail,
-  MultipleChoice,
   Question,
   QuestionWithResult,
   SubmitAssessmentPayload,
@@ -18,8 +17,47 @@ import { Routes } from '../router/constants/routesMap'
 
 type QuestionState = Question | QuestionWithResult
 
+type NormalizedOption = {
+  id: string
+  text: string
+}
+
 function isQuestionWithResult(q: QuestionState): q is QuestionWithResult {
   return (q as QuestionWithResult).studentAnswer !== undefined
+}
+
+function normalizeOptions(options: unknown): NormalizedOption[] {
+  const normalized = Array.isArray(options)
+    ? options
+    : options && typeof options === 'object'
+      ? Object.values(options as Record<string, unknown>)
+      : []
+
+  return normalized
+    .map((opt, index) => {
+      if (typeof opt === 'string') {
+        return { id: String(index), text: opt }
+      }
+
+      if (opt && typeof opt === 'object') {
+        const record = opt as Record<string, unknown>
+        const textValue =
+          typeof record.text === 'string'
+            ? record.text
+            : typeof record.label === 'string'
+              ? record.label
+              : typeof record.value === 'string'
+                ? record.value
+                : ''
+        const idValue =
+          record.id !== undefined && record.id !== null ? String(record.id) : String(index)
+
+        return { id: idValue, text: textValue }
+      }
+
+      return { id: String(index), text: '' }
+    })
+    .filter((opt) => opt.text.trim().length > 0)
 }
 
 const QuestionPage = () => {
@@ -221,8 +259,18 @@ const QuestionPage = () => {
                             const type = q.questionType.toUpperCase()
 
                             if (type === 'MULTIPLE_CHOICE' || type === 'TRUE_FALSE') {
-                              return (q.options as MultipleChoice[]).map((opt) => {
-                                const isUserChoice = studentAnswerText === opt.text
+                              const normalizedOptions = normalizeOptions(q.options)
+                              const optionsToRender =
+                                type === 'TRUE_FALSE' && normalizedOptions.length === 0
+                                  ? [
+                                      { id: 'true', text: 'Verdadeiro' },
+                                      { id: 'false', text: 'Falso' },
+                                    ]
+                                  : normalizedOptions
+
+                              return optionsToRender.map((opt) => {
+                                const hasAnswer = Boolean(studentAnswerText)
+                                const isUserChoice = hasAnswer && studentAnswerText === opt.text
                                 const isCorrectOption = isReviewMode && correctAnswer === opt.text
 
                                 let containerStyle =

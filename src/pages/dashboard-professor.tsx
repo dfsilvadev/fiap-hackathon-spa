@@ -480,10 +480,12 @@ const DashboardProfessorPage = () => {
                         <div className="mt-3 flex-shrink-0 sm:mt-0">
                           <button
                             type="button"
-                            onClick={() => navigate(Routes.TRIALS)}
+                            onClick={() =>
+                              navigate(Routes.TRIALS_DETAIL.replace(':id', path.pathId))
+                            }
                             className="w-full rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 sm:w-auto"
                           >
-                            Continuar
+                            Abrir trilha
                           </button>
                         </div>
                       </div>

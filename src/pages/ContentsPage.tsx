@@ -1,16 +1,16 @@
-import { useState, useEffect, useMemo } from 'react'
+import { getRecommendations, Recommendation } from '@/resources/recommendationResources'
+import { Content, contentService, ProgressContentItem } from '@/services/contentService'
+import { Article, CaretRight, Funnel, MagnifyingGlass, Sparkle } from '@phosphor-icons/react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MagnifyingGlass, Funnel, Article, Sparkle, CaretRight } from '@phosphor-icons/react'
-import { contentService, Content, ProgressContentItem } from '@/services/contentService'
 
-type LevelFilter = 'all' | '1' | '2' | '3' | 'reforco'
+type LevelFilter = 'all' | '1' | '2' | '3'
 
 const levelFilterOptions: { value: LevelFilter; label: string }[] = [
   { value: 'all', label: 'Filtrar por Nível' },
   { value: '1', label: 'Nível 1' },
   { value: '2', label: 'Nível 2' },
   { value: '3', label: 'Nível 3' },
-  { value: 'reforco', label: 'Reforço' },
 ]
 
 function getLevelLabel(level?: string) {
@@ -58,6 +58,9 @@ export default function ContentsPage() {
   const [progressByContentId, setProgressByContentId] = useState<
     Record<string, ProgressContentItem>
   >({})
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([])
+  const [recommendationsLoading, setRecommendationsLoading] = useState(true)
+  const [recommendationsError, setRecommendationsError] = useState<string | null>(null)
 
   useEffect(() => {
     async function loadData() {
@@ -100,16 +103,35 @@ export default function ContentsPage() {
     loadData()
   }, [])
 
+  useEffect(() => {
+    async function loadRecommendations() {
+      try {
+        setRecommendationsLoading(true)
+        setRecommendationsError(null)
+        const response = await getRecommendations('pending')
+        const data = response.data as Recommendation[] | { recommendations: Recommendation[] }
+        const items = Array.isArray(data) ? data : (data.recommendations ?? [])
+        setRecommendations(items)
+      } catch (error) {
+        console.error('Erro ao carregar recomendações:', error)
+        setRecommendationsError('Não foi possível carregar suas recomendações.')
+        setRecommendations([])
+      } finally {
+        setRecommendationsLoading(false)
+      }
+    }
+
+    loadRecommendations()
+  }, [])
+
   const groupedContents = useMemo(() => {
     const groups: Record<string, Content[]> = {}
 
     contents.forEach((c) => {
+      if (c.level === 'reforco') return
       const matchesSearch = c.title?.toLowerCase().includes(searchTerm.toLowerCase())
 
-      const matchesLevel =
-        levelFilter === 'all' ||
-        c.level === levelFilter ||
-        (levelFilter === 'reforco' && c.level === 'reforco')
+      const matchesLevel = levelFilter === 'all' || c.level === levelFilter
 
       if (!matchesSearch || !matchesLevel) return
 
@@ -123,9 +145,12 @@ export default function ContentsPage() {
 
   const hasAnyContent = Object.values(groupedContents).some((items) => items.length > 0)
 
-  function isContentBlocked(contentId: string) {
-    const progress = progressByContentId[contentId]
-    return progress?.status === 'blocked'
+  function getContentAvailability(content: Content) {
+    return content.status ?? progressByContentId[content.id]?.status
+  }
+
+  function isContentBlocked(content: Content) {
+    return getContentAvailability(content) === 'blocked'
   }
 
   if (loading)
@@ -170,6 +195,66 @@ export default function ContentsPage() {
         </div>
       </header>
 
+      <section className="mb-8 rounded-3xl border border-slate-100 bg-white p-8 shadow-sm">
+        <header className="mb-4 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-bold text-slate-900">Recomendações</h2>
+            <p className="text-xs text-slate-400">Conteúdos de reforço indicados para você</p>
+          </div>
+        </header>
+
+        {recommendationsError && (
+          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {recommendationsError}
+          </div>
+        )}
+
+        {recommendationsLoading ? (
+          <div className="py-8 text-center text-slate-400 italic">Buscando recomendações...</div>
+        ) : recommendations.length === 0 ? (
+          <div className="py-8 text-center text-slate-400">Sem recomendações no momento.</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {recommendations.map((rec) => (
+              <button
+                key={rec.id}
+                type="button"
+                onClick={() =>
+                  navigate(`/conteudos/${rec.content.id}`, {
+                    state: { recommendationId: rec.id, recommendationStatus: rec.status },
+                  })
+                }
+                className="group relative flex items-center gap-4 p-5 bg-white border border-amber-100 rounded-2xl transition-all text-left hover:border-amber-200 hover:shadow-md"
+              >
+                <div className="p-4 rounded-xl shrink-0 bg-amber-50 text-amber-500">
+                  <Sparkle size={24} weight="fill" />
+                </div>
+
+                <div className="flex-1 min-w-0 space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider bg-amber-50 text-amber-600">
+                      Recomendado
+                    </span>
+
+                    <CaretRight
+                      size={18}
+                      className="text-slate-200 group-hover:text-amber-500 transition-colors"
+                    />
+                  </div>
+
+                  <h3 className="font-bold text-slate-800 truncate pr-4">{rec.content.title}</h3>
+
+                  <p className="text-[11px] text-slate-400">
+                    {rec.content.categoryName} • Série {rec.content.grade} •{' '}
+                    {getLevelLabel(rec.content.level)}
+                  </p>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+      </section>
+
       {!hasAnyContent ? (
         <section className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm min-h-[320px] flex flex-col items-center justify-center text-slate-400">
           <Article size={48} weight="light" className="mb-4 opacity-20" />
@@ -178,22 +263,17 @@ export default function ContentsPage() {
       ) : (
         <div className="space-y-6">
           {Object.entries(groupedContents).map(([categoryName, items]) => {
-            const reinforcementItems = items.filter((content) => content.level === 'reforco')
+            const levelItems = items.slice().sort((a, b) => {
+              const aLevel = Number(a.level)
+              const bLevel = Number(b.level)
 
-            const levelItems = items
-              .filter((content) => content.level !== 'reforco')
-              .slice()
-              .sort((a, b) => {
-                const aLevel = Number(a.level)
-                const bLevel = Number(b.level)
+              if (Number.isFinite(aLevel) && Number.isFinite(bLevel)) {
+                return aLevel - bLevel // 1, 2, 3...
+              }
 
-                if (Number.isFinite(aLevel) && Number.isFinite(bLevel)) {
-                  return aLevel - bLevel // 1, 2, 3...
-                }
-
-                // fallback para ordenação alfabética, caso o nível venha em outro formato
-                return String(a.level).localeCompare(String(b.level))
-              })
+              // fallback para ordenação alfabética, caso o nível venha em outro formato
+              return String(a.level).localeCompare(String(b.level))
+            })
 
             return (
               <section
@@ -209,101 +289,17 @@ export default function ContentsPage() {
                   </p>
                 </header>
 
-                {/* Reforços primeiro */}
-                {reinforcementItems.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    {reinforcementItems.map((content) => {
-                      const progressItem = progressByContentId[content.id]
-                      const statusInfo = getStatusLabelAndPercent(progressItem, content.userStatus)
-                      const blocked = isContentBlocked(content.id)
-
-                      return (
-                        <button
-                          key={content.id}
-                          type="button"
-                          disabled={blocked}
-                          onClick={() => {
-                            if (blocked) return
-                            navigate(`/conteudos/${content.id}`)
-                          }}
-                          className={`group relative flex items-center gap-4 p-5 bg-white border rounded-2xl transition-all text-left
-                        ${
-                          blocked
-                            ? 'border-slate-100 opacity-60 cursor-not-allowed'
-                            : 'border-slate-100 hover:border-blue-200 hover:shadow-md'
-                        }`}
-                        >
-                          <div
-                            className={`p-4 rounded-xl shrink-0 ${
-                              content.level === 'reforco'
-                                ? 'bg-amber-50 text-amber-500'
-                                : 'bg-blue-50 text-blue-500'
-                            }`}
-                          >
-                            {content.level === 'reforco' ? (
-                              <Sparkle size={24} weight="fill" />
-                            ) : (
-                              <Article size={24} weight="fill" />
-                            )}
-                          </div>
-
-                          <div className="flex-1 min-w-0 space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span
-                                className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
-                                  content.level === 'reforco'
-                                    ? 'bg-amber-50 text-amber-600'
-                                    : 'bg-blue-50 text-blue-600'
-                                }`}
-                              >
-                                {getLevelLabel(content.level)}
-                              </span>
-
-                              <CaretRight
-                                size={18}
-                                className="text-slate-200 group-hover:text-blue-500 transition-colors"
-                              />
-                            </div>
-
-                            <h3 className="font-bold text-slate-800 truncate pr-4">
-                              {content.title}
-                            </h3>
-
-                            <p className="text-[11px] text-slate-400">
-                              {content.type ?? 'Conteúdo'}{' '}
-                              {content.durationMinutes ? `• ${content.durationMinutes} min` : null}
-                            </p>
-
-                            <div className="mt-2">
-                              <div className="flex justify-between text-[11px] text-slate-400 mb-1">
-                                <span>Progresso</span>
-                                <span className="font-semibold text-slate-500">
-                                  {statusInfo.percent}%
-                                </span>
-                              </div>
-                              <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
-                                <div
-                                  className={`h-full rounded-full ${
-                                    statusInfo.percent === 100 ? 'bg-emerald-500' : 'bg-blue-500'
-                                  }`}
-                                  style={{ width: `${statusInfo.percent}%` }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </button>
-                      )
-                    })}
-                  </div>
-                )}
-
                 {/* Depois níveis 1, 2, 3 em ordem crescente */}
                 {levelItems.length > 0 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {levelItems.map((content) => {
                       const progressItem = progressByContentId[content.id]
                       const statusInfo = getStatusLabelAndPercent(progressItem, content.userStatus)
-                      const blocked = isContentBlocked(content.id)
+                      const availability = getContentAvailability(content)
+                      const blocked = isContentBlocked(content)
+                      const displayStatus = blocked
+                        ? { label: 'Bloqueado', percent: 0 }
+                        : statusInfo
 
                       return (
                         <button
@@ -337,15 +333,16 @@ export default function ContentsPage() {
 
                           <div className="flex-1 min-w-0 space-y-2">
                             <div className="flex justify-between items-center">
-                              <span
-                                className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
-                                  content.level === 'reforco'
-                                    ? 'bg-amber-50 text-amber-600'
-                                    : 'bg-blue-50 text-blue-600'
-                                }`}
-                              >
-                                {getLevelLabel(content.level)}
-                              </span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider bg-blue-50 text-blue-600">
+                                  {getLevelLabel(content.level)}
+                                </span>
+                                {availability === 'blocked' && (
+                                  <span className="text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider bg-slate-100 text-slate-500">
+                                    Bloqueado
+                                  </span>
+                                )}
+                              </div>
 
                               <CaretRight
                                 size={18}
@@ -364,17 +361,21 @@ export default function ContentsPage() {
 
                             <div className="mt-2">
                               <div className="flex justify-between text-[11px] text-slate-400 mb-1">
-                                <span>Progresso</span>
+                                <span>{blocked ? 'Status' : 'Progresso'}</span>
                                 <span className="font-semibold text-slate-500">
-                                  {statusInfo.percent}%
+                                  {blocked ? displayStatus.label : `${displayStatus.percent}%`}
                                 </span>
                               </div>
                               <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
                                 <div
                                   className={`h-full rounded-full ${
-                                    statusInfo.percent === 100 ? 'bg-emerald-500' : 'bg-blue-500'
+                                    blocked
+                                      ? 'bg-slate-300'
+                                      : displayStatus.percent === 100
+                                        ? 'bg-emerald-500'
+                                        : 'bg-blue-500'
                                   }`}
-                                  style={{ width: `${statusInfo.percent}%` }}
+                                  style={{ width: `${displayStatus.percent}%` }}
                                 />
                               </div>
                             </div>
