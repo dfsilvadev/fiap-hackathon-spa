@@ -1,7 +1,7 @@
-import { z } from 'zod'
 import * as yup from 'yup'
+import { z } from 'zod'
 
-/** Exemplo com Zod */
+/** Example using Zod. */
 export const userSchemaZod = z.object({
   name: z.string().min(2),
   email: z.string().email(),
@@ -9,7 +9,7 @@ export const userSchemaZod = z.object({
 
 export type UserZod = z.infer<typeof userSchemaZod>
 
-/** Exemplo com Yup */
+/** Example using Yup. */
 export const userSchemaYup = yup.object({
   name: yup.string().required().min(2),
   email: yup.string().required().email(),

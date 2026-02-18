@@ -13,7 +13,7 @@ export interface MenuItem {
   label: string
   path: string
   roles: string[]
-  icon: Icon // Define o tipo como Icon para remover o erro de lint
+  icon: Icon
 }
 
 export type UserRole = 'student' | 'teacher' | 'coordinator'

@@ -22,7 +22,7 @@ export class ConsoleLogger implements ILogger {
   }
 
   debug(message: string, ...args: unknown[]): void {
-    // Usa console.log em vez de console.debug para garantir visibilidade
+    // Uses console.log instead of console.debug for consistent visibility
     console.log(`🔍 [DEBUG] ${message}`, ...args)
   }
 }

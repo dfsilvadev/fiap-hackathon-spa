@@ -1,7 +1,7 @@
-import { Form, Field, FieldArray, Formik, ErrorMessage } from 'formik'
-import * as Yup from 'yup'
-import { Plus, Trash, ArrowLeft, FileArrowUp } from '@phosphor-icons/react'
+import { ArrowLeft, FileArrowUp, Plus, Trash } from '@phosphor-icons/react'
+import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik'
 import { useNavigate } from 'react-router-dom'
+import * as Yup from 'yup'
 
 import { DatePickerField } from '@/components/inputs/datePickerField'
 import { PhoneField } from '@/components/inputs/phoneField'
@@ -106,7 +106,6 @@ const UserCreatePage = () => {
     }
 
     await createStudentUser(payload)
-    // TODO: substituir por toast global se existir
     alert('Aluno criado com sucesso!')
     navigate(Routes.USERS)
   }
@@ -140,7 +139,6 @@ const UserCreatePage = () => {
         >
           {({ values, isSubmitting, errors, touched }) => (
             <Form className="space-y-8">
-              {/* Informações básicas */}
               <section className="rounded-3xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
                 <div className="mb-6">
                   <h2 className="text-lg font-semibold text-slate-900">Informações Básicas</h2>
@@ -221,7 +219,6 @@ const UserCreatePage = () => {
                 </div>
               </section>
 
-              {/* Dados do aluno */}
               <section className="rounded-3xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
                 <div className="mb-6">
                   <h2 className="text-lg font-semibold text-slate-900">Dados do Aluno</h2>
@@ -253,7 +250,6 @@ const UserCreatePage = () => {
                 </div>
               </section>
 
-              {/* Responsáveis */}
               <FieldArray name="guardians">
                 {({ push, remove }) => (
                   <section className="rounded-3xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
@@ -354,7 +350,6 @@ const UserCreatePage = () => {
                 )}
               </FieldArray>
 
-              {/* Ações */}
               <div className="flex justify-end gap-4 pb-4">
                 <button
                   type="button"

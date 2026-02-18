@@ -23,7 +23,6 @@ function getStatusLabelAndPercent(
   progressItem?: ProgressContentItem,
   fallbackStatus?: Content['userStatus']
 ) {
-  // Fonte da verdade: progresso vindo do backend (/progress)
   if (progressItem) {
     const { status, progressStatus } = progressItem
 
@@ -32,15 +31,12 @@ function getStatusLabelAndPercent(
     }
 
     if (progressStatus === 'in_progress') {
-      // backend não manda percent por conteúdo; usamos um valor intermediário
       return { label: 'Em progresso', percent: 50 }
     }
 
-    // not_started + available/blocked
     return { label: 'Não iniciado', percent: 0 }
   }
 
-  // Fallback antigo baseado em userStatus embutido no conteúdo (se backend passar algo ali)
   const progress = fallbackStatus?.progress ?? 0
   const completed = fallbackStatus?.completed ?? progress === 100
 
@@ -70,7 +66,6 @@ export default function ContentsPage() {
           const list = data.contents
           setContents(list)
 
-          // Carrega o progresso por categoria (matéria) para saber o que está bloqueado
           const categoryIds = Array.from(new Set(list.map((c) => c.categoryId).filter(Boolean)))
 
           if (categoryIds.length > 0) {
@@ -268,10 +263,9 @@ export default function ContentsPage() {
               const bLevel = Number(b.level)
 
               if (Number.isFinite(aLevel) && Number.isFinite(bLevel)) {
-                return aLevel - bLevel // 1, 2, 3...
+                return aLevel - bLevel
               }
 
-              // fallback para ordenação alfabética, caso o nível venha em outro formato
               return String(a.level).localeCompare(String(b.level))
             })
 
@@ -283,13 +277,11 @@ export default function ContentsPage() {
                 <header className="mb-5">
                   <h2 className="text-lg font-bold text-slate-900">{categoryName}</h2>
                   <p className="text-xs text-slate-400">
-                    {/* descrição opcional vinda do backend, se existir */}
                     {items[0]?.category?.description ??
                       'Conteúdos organizados para o seu desenvolvimento.'}
                   </p>
                 </header>
 
-                {/* Depois níveis 1, 2, 3 em ordem crescente */}
                 {levelItems.length > 0 && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {levelItems.map((content) => {

@@ -150,7 +150,6 @@ export default function ContentReadingPage() {
 
       await contentService.markContentCompleted(content.id)
 
-      // Atualiza estado localmente para refletir o progresso concluído
       setContent((prev) =>
         prev
           ? {

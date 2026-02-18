@@ -5,7 +5,7 @@ export interface AssessmentCategory {
   name: string
 }
 
-/** Avaliação na listagem GET /assessments */
+/** Assessment item returned by GET /assessments. */
 export interface AssessmentListItem {
   id: string
   title: string
@@ -19,7 +19,7 @@ export interface AssessmentListItem {
   isActive?: boolean
 }
 
-/** Questão (listagem não retorna correctAnswer por segurança) */
+/** Question item (list endpoint may omit correctAnswer for security reasons). */
 export interface AssessmentQuestionItem {
   id: string
   questionText: string
@@ -31,7 +31,7 @@ export interface AssessmentQuestionItem {
   correctAnswer?: string
 }
 
-/** Avaliação no detalhe GET /assessments/:id (com questions) */
+/** Assessment details returned by GET /assessments/:id (with questions). */
 export interface AssessmentDetailDto extends AssessmentListItem {
   questions?: AssessmentQuestionItem[]
 }

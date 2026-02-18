@@ -1,17 +1,17 @@
+import { ArrowLeft, FloppyDisk, Plus, X } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { ArrowLeft, FloppyDisk, Plus, X } from '@phosphor-icons/react'
 
 import { MarkdownEditor } from '@/components/MarkdownEditor'
+import { CONTENT_GRADE_OPTIONS, CONTENT_LEVEL_OPTIONS } from '@/constants/content'
 import { useAuth } from '@/hooks/useAuth'
+import { Routes } from '@/router/constants/routesMap'
 import {
-  contentService,
   Content,
+  contentService,
   type ContentTopic,
   type UpdateContentPayload,
 } from '@/services/contentService'
-import { CONTENT_GRADE_OPTIONS, CONTENT_LEVEL_OPTIONS } from '@/constants/content'
-import { Routes } from '@/router/constants/routesMap'
 
 const allowedRoles = ['teacher', 'coordinator']
 
@@ -236,7 +236,6 @@ export default function ContentEditPage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Informações Básicas */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-slate-900">Informações Básicas</h2>
             <p className="mt-1 text-sm text-slate-500">Dados principais do conteúdo</p>
@@ -301,7 +300,6 @@ export default function ContentEditPage() {
             </div>
           </div>
 
-          {/* Conteúdo */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-slate-900">Conteúdo</h2>
             <p className="mt-1 text-sm text-slate-500">Texto principal do conteúdo pedagógico</p>
@@ -319,7 +317,6 @@ export default function ContentEditPage() {
             </div>
           </div>
 
-          {/* Tópicos */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-slate-900">Tópicos</h2>
             <p className="mt-1 text-sm text-slate-500">
@@ -363,7 +360,6 @@ export default function ContentEditPage() {
             )}
           </div>
 
-          {/* Tags */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-slate-900">Tags</h2>
             <p className="mt-1 text-sm text-slate-500">

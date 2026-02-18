@@ -1,14 +1,14 @@
+import { ArrowLeft, FloppyDisk, Plus, Trash } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, FloppyDisk, Plus, Trash } from '@phosphor-icons/react'
 
-import { useAuth } from '@/hooks/useAuth'
-import { assessmentService } from '@/services/assessmentService'
-import { contentService, type CategoryDto } from '@/services/contentService'
-import { getTeacherSubjects } from '@/resources/teacherSubjectsResources'
 import { ASSESSMENT_LEVEL_OPTIONS, QUESTION_TYPE_OPTIONS } from '@/constants/assessment'
 import { CONTENT_GRADE_OPTIONS } from '@/constants/content'
+import { useAuth } from '@/hooks/useAuth'
+import { getTeacherSubjects } from '@/resources/teacherSubjectsResources'
 import { Routes } from '@/router/constants/routesMap'
+import { assessmentService } from '@/services/assessmentService'
+import { contentService, type CategoryDto } from '@/services/contentService'
 
 const allowedRoles = ['teacher', 'coordinator']
 
@@ -211,7 +211,6 @@ export default function AssessmentCreatePage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Informações da Avaliação */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-slate-900">Informações da Avaliação</h2>
             <p className="mt-1 text-sm text-slate-500">Dados básicos da avaliação</p>
@@ -308,7 +307,6 @@ export default function AssessmentCreatePage() {
             </div>
           </div>
 
-          {/* Questões */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>

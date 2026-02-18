@@ -144,7 +144,6 @@ const UsersListPage = () => {
           )}
         </header>
 
-        {/* Filtros */}
         <section className="mb-6 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-500">
@@ -182,7 +181,6 @@ const UsersListPage = () => {
           </div>
         </section>
 
-        {/* Lista de usuários */}
         <section className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-center justify-between gap-3">
             <div>
@@ -279,7 +277,6 @@ const UsersListPage = () => {
                         </div>
                       </td>
                       <td className="px-4 py-3.5">
-                        {/* Endpoint de status vem da tela de edição; aqui exibimos badge genérico */}
                         <span className="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-[11px] font-semibold text-blue-700">
                           Ativo
                         </span>
@@ -325,7 +322,6 @@ const UsersListPage = () => {
             </div>
           )}
 
-          {/* Paginação simples baseada no backend */}
           {!loading && studentsState.totalPages > 1 && (
             <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
               <p className="text-xs text-slate-500">
@@ -361,7 +357,6 @@ const UsersListPage = () => {
           )}
         </section>
 
-        {/* Modal de detalhes do usuário */}
         {detailsOpen && detailsStudent && (
           <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/40 px-4 py-6">
             <div className="w-full max-w-xl rounded-2xl bg-white shadow-xl">

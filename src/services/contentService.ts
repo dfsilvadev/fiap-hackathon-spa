@@ -14,7 +14,7 @@ export interface ContentSection {
 
 export interface ContentStatus {
   favorite?: boolean
-  progress?: number // 0–100
+  progress?: number // 0-100
   completed?: boolean
   lastViewedAt?: string
 }
@@ -24,20 +24,20 @@ export interface ContentTopic {
   content: string
 }
 
-// Estrutura base de conteúdo – usada tanto na lista quanto no detalhe.
-// Muitos campos são opcionais para permitir evolução da API sem quebrar o frontend.
+// Base content shape used in both list and detail responses.
+// Many fields are optional to keep the frontend resilient to API evolution.
 export interface Content {
   id: string
   slug?: string
 
-  // Informações principais
+  // Core information
   title: string
   shortDescription?: string
   longDescription?: string
   coverImageUrl?: string
-  type?: string // ex.: 'curso', 'video', 'artigo'
+  type?: string // e.g. 'course', 'video', 'article'
 
-  // Organização
+  // Organization
   categoryId: string
   category: {
     id: string
@@ -47,15 +47,15 @@ export interface Content {
   grade?: string
   level: string // '1' | '2' | '3' | 'reforco' | etc.
 
-  // Conteúdo pedagógico
+  // Learning content
   contentText: string
   sections?: ContentSection[]
-  // backend devolve "topics": {} – tratamos como dicionário de tópicos
+  // Backend may return "topics": {} - handled as a topic dictionary.
   topics: Record<string, ContentTopic> | null
-  // backend hoje envia "tags": {} – mantemos flexível
+  // Backend may return "tags": {} - kept flexible intentionally.
   tags: string[] | Record<string, unknown> | null
 
-  // Metadados e engajamento
+  // Metadata and engagement
   durationMinutes?: number
   publishedAt?: string
   author?: ContentAuthor
@@ -68,18 +68,18 @@ export interface Content {
   averageRating?: number
   ratingsCount?: number
 
-  // Estado do usuário
+  // User state
   userStatus?: ContentStatus
 
-  // Disponibilidade para o aluno (GET /contents/for-student)
+  // Student availability status (GET /contents/for-student)
   status?: ProgressAvailabilityStatus
 
-  // Relações
+  // Relations
   relatedContents?: Array<
     Pick<Content, 'id' | 'slug' | 'title' | 'coverImageUrl' | 'type' | 'level'>
   >
 
-  // Gestão (professor/coordenador) – listagem GET /contents
+  // Management fields for teacher/coordinator listing (GET /contents)
   userId?: string
   isActive?: boolean
   createdAt?: string
@@ -93,7 +93,7 @@ interface ContentsResponse {
   total: number
 }
 
-/** Query params para listagem de conteúdos (professor/coordenador) */
+/** Query params for teacher/coordinator content listing. */
 export interface ContentsListParams {
   categoryId?: string
   grade?: string
@@ -103,7 +103,7 @@ export interface ContentsListParams {
   limit?: number
 }
 
-/** Payload de criação de conteúdo – POST /contents */
+/** Payload for creating content - POST /contents. */
 export interface CreateContentPayload {
   title: string
   contentText: string
@@ -116,7 +116,7 @@ export interface CreateContentPayload {
   tags?: string[]
 }
 
-/** Payload de edição – PATCH /contents/:id (todos opcionais) */
+/** Payload for updating content - PATCH /contents/:id (all optional). */
 export interface UpdateContentPayload {
   title?: string
   contentText?: string
@@ -171,8 +171,8 @@ interface ContentProgress {
 
 export const contentService = {
   /**
-   * Lista de conteúdos visíveis para o aluno.
-   * Bate diretamente com o endpoint GET /contents/for-student?categoryId=&page=&limit=
+   * Lists content visible to students.
+   * Maps to GET /contents/for-student?categoryId=&page=&limit=
    */
   getContentsForStudent: async (options?: {
     categoryId?: string
@@ -187,13 +187,12 @@ export const contentService = {
 
     const queryParams = Object.keys(params).length > 0 ? params : undefined
 
-    // Usa exatamente a rota exposta pelo backend para o aluno
     const response = await get<ContentsResponse>('/contents/for-student', true, queryParams)
-    return response.data // { contents, total }
+    return response.data
   },
 
   /**
-   * Detalhe de um conteúdo para o aluno – GET /contents/:id
+   * Gets student content details - GET /contents/:id.
    */
   getContentById: async (id: string) => {
     const response = await get<Content>(`/contents/${id}`, true)
@@ -201,14 +200,13 @@ export const contentService = {
   },
 
   /**
-   * Marca um conteúdo como concluído para o aluno logado.
+   * Marks content as completed for the logged-in student.
    * Endpoint: PATCH /progress
    */
   markContentCompleted: async (contentId: string, timeSpentSeconds = 1200) => {
     const body: ContentProgressPayload = {
       contentId,
       status: 'completed',
-      // backend espera inteiro em segundos
       timeSpent: Math.max(0, Math.floor(timeSpentSeconds)),
     }
 
@@ -218,19 +216,17 @@ export const contentService = {
   },
 
   /**
-   * Progresso do aluno por categoria (matéria) – GET /progress?categoryId=
+   * Gets student progress by category (subject) - GET /progress?categoryId=
    */
   getProgressByCategory: async (categoryId: string) => {
     const response = await get<CategoryProgressResponse>('/progress', true, { categoryId })
     return response.data
   },
 
-  // ----- Gestão (professor/coordenador) -----
-
   /**
-   * Listagem de conteúdos para professor/coordenador.
+   * Lists content for teacher/coordinator.
    * GET /contents?categoryId=&grade=&level=&isActive=&page=&limit=
-   * Professor vê só conteúdos das matérias que leciona; coordenador vê todos.
+   * Teachers only see subjects they teach; coordinators see all.
    */
   getContents: async (params?: ContentsListParams) => {
     const query: Record<string, string | number | boolean> = {}
@@ -245,8 +241,8 @@ export const contentService = {
   },
 
   /**
-   * Categorias/matérias – para filtros e select no formulário.
-   * GET /categories – backend pode responder:
+   * Gets categories/subjects for filters and form select.
+   * GET /categories - backend can respond with:
    * - [ { id, name } ]
    * - { categories: [ { id, name } ] }
    */
@@ -263,8 +259,8 @@ export const contentService = {
   },
 
   /**
-   * Criar conteúdo – POST /contents.
-   * 403 se professor tentar criar para matéria que não leciona.
+   * Creates content - POST /contents.
+   * Returns 403 if a teacher tries to create content for a subject they do not teach.
    */
   createContent: async (body: CreateContentPayload) => {
     const response = await post<Content, CreateContentPayload>('/contents', body, true)
@@ -272,8 +268,8 @@ export const contentService = {
   },
 
   /**
-   * Atualizar conteúdo – PATCH /contents/:id.
-   * 403 se sem permissão sobre a matéria do conteúdo.
+   * Updates content - PATCH /contents/:id.
+   * Returns 403 when the user has no permission for the content subject.
    */
   updateContent: async (id: string, body: UpdateContentPayload) => {
     const response = await patch<Content, UpdateContentPayload>(`/contents/${id}`, body, true)
@@ -281,8 +277,8 @@ export const contentService = {
   },
 
   /**
-   * Ativar/desativar conteúdo (soft delete) – PATCH /contents/:id/active.
-   * Resposta 204 sem body.
+   * Activates/deactivates content (soft delete) - PATCH /contents/:id/active.
+   * Returns 204 with no body.
    */
   setContentActive: async (id: string, isActive: boolean) => {
     await patch<unknown, { isActive: boolean }>(`/contents/${id}/active`, { isActive }, true)

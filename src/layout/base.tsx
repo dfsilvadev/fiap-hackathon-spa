@@ -1,5 +1,5 @@
+import { Outlet } from 'react-router'
 import Sidebar from '../components/menu/sidebar'
-import { Outlet } from 'react-router' // Certifique-se de que é 'react-router' ou 'react-router-dom'
 
 const Base = () => {
   return (
@@ -9,7 +9,6 @@ const Base = () => {
       </aside>
 
       <main className="flex-grow p-4">
-        {/* O Outlet é o que "renderiza" a sua ContentsPage aqui dentro */}
         <Outlet />
       </main>
     </div>
