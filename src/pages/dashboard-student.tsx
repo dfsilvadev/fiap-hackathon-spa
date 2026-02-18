@@ -1,16 +1,16 @@
-import { useState, useEffect, useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../hooks/useAuth'
 import {
   BookOpen,
   CaretRightIcon,
-  Lightbulb,
   ClipboardText,
+  Lightbulb,
   MagnifyingGlass,
 } from '@phosphor-icons/react'
+import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth'
 
+import { DashboardStudent as DashboardType } from '../components/ui/dashboard'
 import { SUMMARY_CONFIG } from '../constant/summary'
-import { DashboardStudent as DashboardType } from '../components/ui/dashboard' // Sua interface postada
 import { getByUser } from '../resources/dashboardResources'
 import { Routes } from '../router/constants/routesMap'
 

@@ -1,8 +1,8 @@
-import { Form, Field, FieldArray, Formik, ErrorMessage } from 'formik'
-import * as Yup from 'yup'
-import { Plus, Trash, ArrowLeft, FileArrowUp, ToggleLeft, ToggleRight } from '@phosphor-icons/react'
+import { ArrowLeft, FileArrowUp, Plus, ToggleLeft, ToggleRight, Trash } from '@phosphor-icons/react'
+import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import * as Yup from 'yup'
 
 import { DatePickerField } from '@/components/inputs/datePickerField'
 import { PhoneField } from '@/components/inputs/phoneField'
@@ -11,9 +11,9 @@ import { useAuth } from '@/hooks/useAuth'
 import {
   getUserById,
   toggleUserActive,
+  updateStudentUser,
   type StudentGrade,
   type UpdateUserStudentInput,
-  updateStudentUser,
 } from '@/resources/userResources'
 import { Routes } from '@/router/constants/routesMap'
 
@@ -187,7 +187,6 @@ const UserEditPage = () => {
         >
           {({ values, isSubmitting, errors, touched, setFieldValue }) => (
             <Form className="space-y-8">
-              {/* Informações básicas */}
               <section className="rounded-3xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
                 <div className="mb-6 flex items-center justify-between gap-4">
                   <div>
@@ -256,7 +255,6 @@ const UserEditPage = () => {
                 </div>
               </section>
 
-              {/* Dados do aluno */}
               <section className="rounded-3xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
                 <div className="mb-6">
                   <h2 className="text-lg font-semibold text-slate-900">Dados do Aluno</h2>
@@ -288,7 +286,6 @@ const UserEditPage = () => {
                 </div>
               </section>
 
-              {/* Responsáveis */}
               <FieldArray name="guardians">
                 {({ push, remove }) => (
                   <section className="rounded-3xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm">
@@ -389,7 +386,6 @@ const UserEditPage = () => {
                 )}
               </FieldArray>
 
-              {/* Ações */}
               <div className="flex justify-end gap-4 pb-4">
                 <button
                   type="button"

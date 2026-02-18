@@ -38,14 +38,11 @@ const StudentTrailsPage = () => {
       setError(null)
 
       try {
-        // 1) Busca as categorias reais do backend
         const apiCategories = await contentService.getCategories()
         setCategories(apiCategories)
 
         const all: LearningPath[] = []
 
-        // 2) Para cada matéria conhecida (Português, Matemática, ...) procura a categoria correspondente
-        //    e busca a trilha padrão para aquela matéria/série do aluno.
         for (const subjectName of subjects) {
           const category = apiCategories.find((c) => c.name === subjectName)
           if (!category) continue
@@ -71,11 +68,7 @@ const StudentTrailsPage = () => {
               all.push(path)
             }
           } catch (err: any) {
-            // 404 significa que não há trilha definida para aquela matéria/série.
             if (err?.response?.status !== 404) {
-              // Para outros erros, apenas registra no console e segue com as demais matérias.
-              // A mensagem geral será exibida abaixo se nenhuma trilha for carregada.
-
               console.error('Erro ao carregar trilha da categoria', category.name, err)
             }
           }

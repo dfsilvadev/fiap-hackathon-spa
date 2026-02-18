@@ -1,18 +1,18 @@
+import { ArrowLeft, FileText, Plus, X } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, FileText, Plus, X } from '@phosphor-icons/react'
 
 import { MarkdownEditor } from '@/components/MarkdownEditor'
+import { CONTENT_GRADE_OPTIONS, CONTENT_LEVEL_OPTIONS } from '@/constants/content'
 import { useAuth } from '@/hooks/useAuth'
+import { getTeacherSubjects } from '@/resources/teacherSubjectsResources'
+import { Routes } from '@/router/constants/routesMap'
 import {
   contentService,
   type CategoryDto,
-  type CreateContentPayload,
   type ContentTopic,
+  type CreateContentPayload,
 } from '@/services/contentService'
-import { getTeacherSubjects } from '@/resources/teacherSubjectsResources'
-import { CONTENT_GRADE_OPTIONS, CONTENT_LEVEL_OPTIONS } from '@/constants/content'
-import { Routes } from '@/router/constants/routesMap'
 
 const allowedRoles = ['teacher', 'coordinator']
 
@@ -166,7 +166,6 @@ export default function ContentCreatePage() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Informações Básicas */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-slate-900">Informações Básicas</h2>
             <p className="mt-1 text-sm text-slate-500">Dados principais sobre o conteúdo</p>
@@ -241,7 +240,6 @@ export default function ContentCreatePage() {
             </div>
           </div>
 
-          {/* Conteúdo */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-slate-900">Conteúdo</h2>
             <p className="mt-1 text-sm text-slate-500">Texto principal do conteúdo pedagógico</p>
@@ -262,7 +260,6 @@ export default function ContentCreatePage() {
             </div>
           </div>
 
-          {/* Tópicos */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-slate-900">Tópicos</h2>
             <p className="mt-1 text-sm text-slate-500">
@@ -306,7 +303,6 @@ export default function ContentCreatePage() {
             )}
           </div>
 
-          {/* Tags */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-slate-900">Tags</h2>
             <p className="mt-1 text-sm text-slate-500">

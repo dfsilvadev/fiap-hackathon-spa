@@ -1,5 +1,3 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import {
   Article,
   FunnelSimple,
@@ -8,17 +6,19 @@ import {
   Plus,
   Power,
 } from '@phosphor-icons/react'
+import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
+import { CONTENT_GRADE_OPTIONS, CONTENT_LEVEL_OPTIONS } from '@/constants/content'
 import { useAuth } from '@/hooks/useAuth'
+import { getTeacherSubjects } from '@/resources/teacherSubjectsResources'
+import { Routes } from '@/router/constants/routesMap'
 import {
-  contentService,
   Content,
+  contentService,
   type CategoryDto,
   type ContentsListParams,
 } from '@/services/contentService'
-import { getTeacherSubjects } from '@/resources/teacherSubjectsResources'
-import { CONTENT_GRADE_OPTIONS, CONTENT_LEVEL_OPTIONS } from '@/constants/content'
-import { Routes } from '@/router/constants/routesMap'
 
 const allowedRoles = ['teacher', 'coordinator']
 const DEFAULT_LIMIT = 20
@@ -81,7 +81,6 @@ export default function ContentsManagePage() {
     }
   }, [isLoggedIn, me, navigate])
 
-  // Carregar categorias: coordenador = GET /categories; professor = matérias que leciona
   useEffect(() => {
     if (!me || !allowedRoles.includes(me.role)) return
 
@@ -188,7 +187,6 @@ export default function ContentsManagePage() {
           </button>
         </header>
 
-        {/* Filtros */}
         <section className="mb-6 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-500">

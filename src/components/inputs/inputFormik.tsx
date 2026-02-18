@@ -1,6 +1,6 @@
 import { IconProps } from '@phosphor-icons/react'
-import { ElementType } from 'react'
 import { useField } from 'formik'
+import { ElementType } from 'react'
 
 interface InputFormikProps {
   name: string
@@ -17,10 +17,8 @@ export const InputFormik = ({
   minWidth = 'min-w-[300px]',
   ...props
 }: InputFormikProps) => {
-  // O hook useField conecta o input ao estado do Formik baseado no "name"
   const [field, meta] = useField(props.name)
 
-  // Verifica se o campo foi tocado e se tem erro para exibir o span
   const hasError = meta.touched && meta.error
 
   return (
@@ -37,8 +35,8 @@ export const InputFormik = ({
         </div>
 
         <input
-          {...field} // Isso passa name, value, onChange e onBlur automaticamente
-          {...props} // Isso passa type, placeholder, etc.
+          {...field}
+          {...props}
           id={props.name}
           className={`
             w-full py-2.5 pl-10 pr-4 bg-white border rounded-sm outline-none transition-all
@@ -50,8 +48,6 @@ export const InputFormik = ({
           `}
         />
       </div>
-
-      {/* Span de Erro condicional */}
       {hasError && <span className="text-xs text-red-500 mt-1 ml-1 font-medium">{meta.error}</span>}
     </div>
   )

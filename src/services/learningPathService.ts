@@ -5,7 +5,7 @@ export interface LearningPathCategory {
   name: string
 }
 
-/** Item de conteúdo dentro da trilha (resposta do GET detalhe) */
+/** Content item inside a learning path (GET detail response). */
 export interface LearningPathContentItem {
   contentId: string
   orderNumber: number
@@ -13,7 +13,7 @@ export interface LearningPathContentItem {
   level: string
 }
 
-/** Trilha na listagem GET /learning-paths */
+/** Learning path item in GET /learning-paths listing. */
 export interface LearningPathListItem {
   id: string
   name: string
@@ -24,7 +24,7 @@ export interface LearningPathListItem {
   description: string | null
 }
 
-/** Trilha no detalhe GET /learning-paths/:id (com contents) */
+/** Learning path details from GET /learning-paths/:id (with contents). */
 export interface LearningPathDetail extends LearningPathListItem {
   createdBy?: string
   isActive?: boolean

@@ -1,18 +1,18 @@
+import type { Guardian, User } from '../components/ui/user'
 import { get, patch, post } from '../lib/axios'
-import type { User, Guardian } from '../components/ui/user'
 import type { ProfessorDashboardStudent } from './professorDashboardResources'
 
 const base = '/users'
 
 /**
- * Séries suportadas para alunos.
- * Mantém o frontend alinhado com o enum do backend.
+ * Supported student grades.
+ * Keeps frontend values aligned with the backend enum.
  */
 export type StudentGrade = '6' | '7' | '8' | '9' | '1EM' | '2EM' | '3EM'
 
 /**
- * Payload de criação de aluno (coordenador).
- * Baseado em CreateUserStudentInput do backend.
+ * Payload for student creation (coordinator).
+ * Based on backend CreateUserStudentInput.
  */
 export interface CreateUserStudentInput {
   name: string
@@ -22,15 +22,15 @@ export interface CreateUserStudentInput {
   currentGrade: StudentGrade
   guardians: Guardian[]
   /**
-   * ISO string – opcional no backend.
-   * Ex.: "2010-05-20"
+   * ISO date string - optional in backend.
+   * Example: "2010-05-20"
    */
   dateOfBirth?: string
 }
 
 /**
- * Payload de atualização de aluno.
- * Todos os campos são opcionais conforme UpdateUserStudentInput.
+ * Payload for student updates.
+ * All fields are optional according to UpdateUserStudentInput.
  */
 export interface UpdateUserStudentInput {
   name?: string
@@ -49,7 +49,7 @@ export interface ProfessorStudentsListResponse {
 }
 
 /**
- * Lista de alunos do professor com filtros de série e paginação.
+ * Lists teacher students with grade filters and pagination.
  * Endpoint: GET /api/dashboard/professor/students?currentGrade=&page=&limit=
  */
 export const getProfessorStudents = (params?: {
@@ -69,27 +69,27 @@ export const getProfessorStudents = (params?: {
 export const getUserById = (id: string) => get<User>(`${base}/${id}`, true)
 
 /**
- * Atualização genérica de usuário – já usada no perfil.
+ * Generic user update, already used by profile flows.
  */
 export const updateUser = (id: string, data: Partial<User>) =>
   patch<User, Partial<User>>(`${base}/${id}`, data, true)
 
 /**
- * Criação de um novo aluno.
+ * Creates a new student.
  * Endpoint: POST /api/users
  */
 export const createStudentUser = (data: CreateUserStudentInput) =>
   post<User, CreateUserStudentInput>(base, data, true)
 
 /**
- * Atualização específica de aluno (sem senha).
+ * Updates a student (without password).
  * Endpoint: PATCH /api/users/:id
  */
 export const updateStudentUser = (id: string, data: UpdateUserStudentInput) =>
   patch<User, UpdateUserStudentInput>(`${base}/${id}`, data, true)
 
 /**
- * Ativar/desativar aluno.
+ * Activates/deactivates a student.
  * Endpoint: PATCH /api/users/:id/active
  */
 export const toggleUserActive = (id: string, isActive: boolean) =>

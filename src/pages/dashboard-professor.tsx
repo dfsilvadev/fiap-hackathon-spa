@@ -226,7 +226,6 @@ const DashboardProfessorPage = () => {
           </div>
         ) : (
           <>
-            {/* Cards de topo */}
             <section aria-label="Resumo" className="mb-10">
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 <div className="flex items-center gap-5 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
@@ -269,9 +268,7 @@ const DashboardProfessorPage = () => {
               </div>
             </section>
 
-            {/* Matérias + Usuários Recentes (layout em duas colunas) */}
             <section className="mb-10 grid gap-6 lg:grid-cols-[1fr_340px]">
-              {/* Matérias (GET /api/teachers/subjects) */}
               <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
                 <div className="mb-5">
                   <h2 className="text-lg font-semibold text-slate-900">
@@ -384,7 +381,6 @@ const DashboardProfessorPage = () => {
                 )}
               </div>
 
-              {/* Usuários Recentes */}
               <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
                 <div className="mb-5">
                   <h2 className="text-lg font-semibold text-slate-900">Usuários Recentes</h2>
@@ -423,7 +419,6 @@ const DashboardProfessorPage = () => {
               </div>
             </section>
 
-            {/* Trilhas de Aprendizado */}
             {filteredLearningPaths.length > 0 && (
               <section className="mb-10" aria-label="Trilhas de aprendizado">
                 <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
@@ -495,7 +490,6 @@ const DashboardProfessorPage = () => {
               </section>
             )}
 
-            {/* Alunos: filtro + tabela em um único card */}
             <section
               className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm"
               aria-label="Alunos"
@@ -507,7 +501,6 @@ const DashboardProfessorPage = () => {
                 </p>
               </div>
 
-              {/* Filtro integrado à seção Alunos */}
               <div className="mb-5 flex flex-wrap items-center gap-2 rounded-xl bg-slate-50/80 px-4 py-3">
                 <span className="text-xs font-semibold text-slate-600">Filtrar por matéria:</span>
                 <button

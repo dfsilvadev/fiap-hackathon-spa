@@ -1,10 +1,10 @@
 import { useAuth } from '@/hooks/useAuth'
-import ContentsPage from '@/pages/ContentsPage'
 import ContentsManagePage from '@/pages/ContentsManagePage'
+import ContentsPage from '@/pages/ContentsPage'
 
 /**
- * Em /conteudos: aluno vê a listagem para estudo (GET /contents/for-student);
- * professor e coordenador vêem a listagem de gestão (GET /contents) com filtros e ações.
+ * At /conteudos: students see the study listing (GET /contents/for-student);
+ * teachers and coordinators see the management listing (GET /contents) with filters and actions.
  */
 export default function ContentsSwitch() {
   const { me } = useAuth()
