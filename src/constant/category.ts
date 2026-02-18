@@ -7,4 +7,6 @@ export const categoryConfig: Record<string, { bg: string; text: string }> = {
   Default: { bg: 'bg-slate-100', text: 'text-slate-600' },
 }
 
-export const categories = ['Todos', 'Português', 'Matemática', 'Ciências', 'História', 'Geografia']
+export const subjects = ['Português', 'Matemática', 'Ciências', 'História', 'Geografia'] as const
+
+export const categories = ['Todos', ...subjects]

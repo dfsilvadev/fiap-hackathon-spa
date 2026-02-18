@@ -4,18 +4,28 @@ const Routes = {
   PERFIL: '/perfil',
 
   DASHBOARD: '/dashboard',
+  DASHBOARD_STUDENT: '/dashboard/aluno',
   STUDENT_TRIALS: '/minhas-trilhas',
   USERS: '/usuarios',
+  USERS_NEW: '/usuarios/novo',
+  USERS_EDIT: '/usuarios/:id',
   CONTENTS: '/conteudos',
+  CONTENTS_NEW: '/conteudos/novo',
+  CONTENTS_EDIT: '/conteudos/:id/editar',
+  CONTENT_DETAILS: '/conteudos/:id',
   TRIALS: '/trilhas',
+  TRIALS_NEW: '/trilhas/novo',
+  TRIALS_EDIT: '/trilhas/:id/editar',
+  TRIALS_DETAIL: '/trilhas/:id',
 
   ASSESSMENTS: '/avaliacoes',
+  ASSESSMENTS_NEW: '/avaliacoes/novo',
+  ASSESSMENTS_EDIT: '/avaliacoes/:id/editar',
+  ASSESSMENTS_QUESTIONS: '/avaliacoes/:id',
   ASSESSMENTS_STUDENT: '/avaliacoes/estudante',
   QUESTION: '/avaliacoes/estudante/:id',
 
   RECOMMENDATIONS: '/recomendacoes',
-  MINHASTRILHAS: '/minhas-trilhas',
-
   NOT_FOUND: '*',
 } as const
 

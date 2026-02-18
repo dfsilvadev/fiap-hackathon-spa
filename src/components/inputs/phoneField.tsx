@@ -26,7 +26,7 @@ export const PhoneField = ({ name, label, variant = 'primary' }: PhoneFieldProps
           format="(##) #####-####"
           mask="_"
           value={field.value}
-          onValueChange={(values) => setFieldValue(name, values.value)}
+          onValueChange={(values: { value: string }) => setFieldValue(name, values.value)}
           className={variant === 'primary' ? primaryClass : subClass}
           placeholder="(00) 00000-0000"
         />
