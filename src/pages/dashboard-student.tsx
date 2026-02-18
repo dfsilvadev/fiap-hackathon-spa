@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import {
   BookOpen,
@@ -11,9 +12,11 @@ import {
 import { SUMMARY_CONFIG } from '../constant/summary'
 import { DashboardStudent as DashboardType } from '../components/ui/dashboard' // Sua interface postada
 import { getByUser } from '../resources/dashboardResources'
+import { Routes } from '../router/constants/routesMap'
 
 const DashboardStudent = () => {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [studentDashboard, setStudentDashboard] = useState<DashboardType | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -145,7 +148,11 @@ const DashboardStudent = () => {
             )}
           </div>
           <footer className="flex mt-auto pt-6 border-t border-gray-100 justify-center">
-            <button className="flex items-center gap-1 text-sm text-gray-700 hover:text-blue-700 hover:font-bold transition-all">
+            <button
+              type="button"
+              onClick={() => navigate(Routes.STUDENT_TRIALS)}
+              className="flex items-center gap-1 text-sm text-gray-700 hover:text-blue-700 hover:font-bold transition-all"
+            >
               <span>Ver todas as trilhas</span>
               <CaretRightIcon size={16} />
             </button>

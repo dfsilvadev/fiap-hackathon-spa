@@ -7,6 +7,5 @@ export default [
     index('../pages/homePage.tsx'),
     route(Routes.HOME.replace('/', ''), '../pages/homePage.tsx'),
   ]),
-
   layout('../layout/auth.tsx', [route(Routes.SIGN_IN.replace('/', ''), '../pages/sign-in.tsx')]),
 ] satisfies RouteConfig
