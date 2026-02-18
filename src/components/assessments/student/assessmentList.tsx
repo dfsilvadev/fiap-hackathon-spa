@@ -1,6 +1,6 @@
-import { AssessmentCard } from './assessmentCard'
-import { Assessments } from '../../ui/assessment'
 import { formatDate } from '../../../util/formatDate'
+import { Assessments } from '../../ui/assessment'
+import { AssessmentCard } from './assessmentCard'
 
 interface AssessmentListProps {
   data: Assessments[]
@@ -11,7 +11,7 @@ export const AssessmentList = ({ data, onStartItem }: AssessmentListProps) => {
   if (data.length === 0) {
     return (
       <div className="mt-10 py-20 text-center bg-gray-50 rounded-xl border-2 border-dashed border-gray-200">
-        <p className="text-gray-400 italic">Nenhuma avaliação encontrada.</p>
+        <p className="text-gray-400 italic">Sem avaliação disponível no momento.</p>
       </div>
     )
   }

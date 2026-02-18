@@ -71,6 +71,9 @@ export interface Content {
   // Estado do usuário
   userStatus?: ContentStatus
 
+  // Disponibilidade para o aluno (GET /contents/for-student)
+  status?: ProgressAvailabilityStatus
+
   // Relações
   relatedContents?: Array<
     Pick<Content, 'id' | 'slug' | 'title' | 'coverImageUrl' | 'type' | 'level'>

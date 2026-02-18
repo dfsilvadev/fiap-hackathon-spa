@@ -1,4 +1,4 @@
-import { ArrowClockwise, CheckCircle, XCircle } from '@phosphor-icons/react'
+import { ArrowClockwise, ArrowRight, CheckCircle, XCircle } from '@phosphor-icons/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -250,12 +250,15 @@ const RecommendationsPage = () => {
                       </button>
                       <button
                         type="button"
-                        disabled={updatingId === rec.id}
-                        onClick={() => handleChangeStatus(rec.id, 'completed')}
-                        className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-blue-700 disabled:opacity-50"
+                        onClick={() =>
+                          navigate(Routes.CONTENT_DETAILS.replace(':id', rec.content.id), {
+                            state: { recommendationId: rec.id, recommendationStatus: rec.status },
+                          })
+                        }
+                        className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-blue-700"
                       >
-                        <CheckCircle size={14} weight="bold" />
-                        Marcar como concluído
+                        <ArrowRight size={14} weight="bold" />
+                        Acessar conteudo
                       </button>
                     </div>
                   ) : (

@@ -1,36 +1,130 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { getRecommendations, Recommendation } from '@/resources/recommendationResources'
+import { Content, contentService } from '@/services/contentService'
+import { Article, CaretLeft, CheckCircle, ListBullets } from '@phosphor-icons/react'
+import { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { CaretLeft, ListBullets, CheckCircle, Article } from '@phosphor-icons/react'
-import { contentService, Content } from '@/services/contentService'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 
 export default function ContentReadingPage() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { id } = useParams()
   const [content, setContent] = useState<Content | null>(null)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [isCompleting, setIsCompleting] = useState(false)
   const [completeError, setCompleteError] = useState<string | null>(null)
+  const [hasRecommendation, setHasRecommendation] = useState<boolean | null>(null)
 
   useEffect(() => {
     async function loadContent() {
       if (id) {
         try {
+          setLoadError(null)
           const data = await contentService.getContentById(id)
           setContent(data)
         } catch (error) {
+          const message = error instanceof Error ? error.message : String(error)
           console.error('Erro ao carregar aula:', error)
+          if (message.includes('404') || message.toLowerCase().includes('not found')) {
+            setLoadError('Este conteúdo de reforço não está mais disponível.')
+          } else {
+            setLoadError('Não foi possível carregar o conteúdo. Tente novamente.')
+          }
         }
       }
     }
     loadContent()
   }, [id])
+  const recommendationState = location.state as
+    | { recommendationId?: string; recommendationStatus?: string }
+    | undefined
+
+  useEffect(() => {
+    let active = true
+
+    async function checkRecommendation() {
+      if (!content || content.level !== 'reforco') {
+        setHasRecommendation(null)
+        return
+      }
+
+      if (recommendationState?.recommendationId) {
+        setHasRecommendation(true)
+        return
+      }
+
+      try {
+        const [pendingResponse, completedResponse] = await Promise.all([
+          getRecommendations('pending'),
+          getRecommendations('completed'),
+        ])
+        const pendingData = pendingResponse.data as
+          | Recommendation[]
+          | { recommendations: Recommendation[] }
+        const completedData = completedResponse.data as
+          | Recommendation[]
+          | { recommendations: Recommendation[] }
+
+        const pendingItems = Array.isArray(pendingData)
+          ? pendingData
+          : (pendingData.recommendations ?? [])
+        const completedItems = Array.isArray(completedData)
+          ? completedData
+          : (completedData.recommendations ?? [])
+
+        const exists = [...pendingItems, ...completedItems].some(
+          (rec) => rec.content.id === content.id
+        )
+
+        if (active) setHasRecommendation(exists)
+      } catch (error) {
+        console.error('Erro ao validar recomendacao:', error)
+        if (active) setHasRecommendation(false)
+      }
+    }
+
+    checkRecommendation()
+
+    return () => {
+      active = false
+    }
+  }, [content, recommendationState?.recommendationId])
+
+  const isReinforcement = content?.level === 'reforco'
+  const isBlocked = content?.status === 'blocked'
+  const isCompleted = content?.userStatus?.completed || content?.userStatus?.progress === 100
+  const recommendationAllowed =
+    !isReinforcement || Boolean(recommendationState?.recommendationId) || hasRecommendation === true
+  const canComplete = Boolean(content) && !isBlocked && recommendationAllowed
+
+  if (loadError) {
+    return (
+      <div className="p-10 text-center text-slate-500">
+        <p className="font-semibold text-slate-700">{loadError}</p>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={() => navigate('/recomendacoes')}
+            className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:border-slate-400"
+          >
+            Voltar para recomendações
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('/conteudos')}
+            className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+          >
+            Ver conteúdos
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   if (!content)
     return <div className="p-10 text-slate-400 italic text-center">Carregando conteúdo...</div>
 
   const levelLabel = content.level === 'reforco' ? 'Reforço' : `Nível ${content.level}`
-
-  const isCompleted = content.userStatus?.completed || content.userStatus?.progress === 100
 
   const topicList = content.topics ? Object.values(content.topics) : []
 
@@ -42,6 +136,14 @@ export default function ContentReadingPage() {
 
   async function handleMarkCompleted() {
     if (!content) return
+    if (!canComplete) {
+      setCompleteError(
+        isBlocked
+          ? 'Este conteúdo está bloqueado no momento.'
+          : 'Conteúdo de reforço só pode ser concluído por recomendação.'
+      )
+      return
+    }
     try {
       setIsCompleting(true)
       setCompleteError(null)
@@ -111,7 +213,7 @@ export default function ContentReadingPage() {
 
             <button
               type="button"
-              disabled={isCompleting || isCompleted}
+              disabled={isCompleting || isCompleted || !canComplete}
               onClick={handleMarkCompleted}
               className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm transition-all active:scale-95 shrink-0
                 ${
