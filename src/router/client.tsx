@@ -19,7 +19,6 @@ import DashboardStudentPage from '@/pages/dashboard-student'
 import NotFound from '@/pages/not-found'
 import QuestionPage from '@/pages/question'
 import RecommendationsPage from '@/pages/recommendations'
-import HomePage from '@/pages/HomePage'
 import SignInPage from '@/pages/sign-in'
 import ProfilePage from '@/pages/ProfilePage'
 import StudentTrailsPage from '@/pages/student-trails'
@@ -37,7 +36,8 @@ const router = createBrowserRouter([
     element: <BaseLayout />,
     children: [
       { index: true, element: <HomeRedirect /> },
-      { path: RoutePaths.HOME.replace('/', ''), element: <HomePage /> },
+      // Home deve levar para o dashboard correspondente ao perfil (aluno / professor)
+      { path: RoutePaths.HOME.replace('/', ''), element: <HomeRedirect /> },
       { path: RoutePaths.NOT_FOUND, element: <NotFound /> },
       {
         element: <PrivateRoutes />,

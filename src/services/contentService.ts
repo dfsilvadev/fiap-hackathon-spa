@@ -243,11 +243,20 @@ export const contentService = {
 
   /**
    * Categorias/matérias – para filtros e select no formulário.
-   * GET /categories (se o backend expuser). Caso contrário use getTeacherSubjects para professor.
+   * GET /categories – backend pode responder:
+   * - [ { id, name } ]
+   * - { categories: [ { id, name } ] }
    */
   getCategories: async () => {
-    const response = await get<CategoryDto[]>('/categories', true)
-    return Array.isArray(response.data) ? response.data : []
+    const response = await get<CategoryDto[] | { categories: CategoryDto[] }>('/categories', true)
+    const data = response.data
+
+    if (Array.isArray(data)) return data
+    if (data && Array.isArray((data as { categories?: CategoryDto[] }).categories)) {
+      return (data as { categories: CategoryDto[] }).categories
+    }
+
+    return []
   },
 
   /**
