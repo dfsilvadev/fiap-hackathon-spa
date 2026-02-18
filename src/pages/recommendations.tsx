@@ -1,5 +1,12 @@
-import { ArrowClockwise, ArrowRight, CheckCircle, XCircle } from '@phosphor-icons/react'
-import { useEffect, useState } from 'react'
+import {
+  ArrowClockwise,
+  ArrowRight,
+  CheckCircle,
+  FunnelSimple,
+  MagnifyingGlass,
+  XCircle,
+} from '@phosphor-icons/react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuth } from '@/hooks/useAuth'
@@ -41,6 +48,7 @@ const RecommendationsPage = () => {
   const [error, setError] = useState<string | null>(null)
   const [recommendations, setRecommendations] = useState<Recommendation[]>([])
   const [statusFilter, setStatusFilter] = useState<RecommendationStatus | 'all'>('pending')
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -87,6 +95,19 @@ const RecommendationsPage = () => {
     fetchRecommendations(statusFilter)
   }, [statusFilter])
 
+  const filteredRecommendations = useMemo(() => {
+    const term = search.trim().toLowerCase()
+    if (!term) return recommendations
+
+    return recommendations.filter((rec) => {
+      const title = rec.content.title?.toLowerCase() ?? ''
+      const reason = rec.reason?.toLowerCase() ?? ''
+      const tags = (rec.tags ?? []).join(' ').toLowerCase()
+
+      return title.includes(term) || reason.includes(term) || tags.includes(term)
+    })
+  }, [recommendations, search])
+
   const handleChangeStatus = async (id: string, status: RecommendationStatus) => {
     try {
       setUpdatingId(id)
@@ -118,7 +139,7 @@ const RecommendationsPage = () => {
 
   return (
     <main className="p-10 w-full animate-in fade-in duration-500 bg-gray-50 min-h-screen">
-      <header className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <header className="mb-8">
         <div className="flex items-start gap-3">
           <div>
             <h1 className="text-3xl font-bold text-slate-900">Recomendações de Reforço</h1>
@@ -128,21 +149,38 @@ const RecommendationsPage = () => {
             </p>
           </div>
         </div>
+      </header>
 
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-            Filtrar por status
-          </span>
-          <div className="flex flex-wrap gap-2">
+      <section className="mb-6 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-500">
+            <FunnelSimple size={16} />
+            <span>Filtros</span>
+          </div>
+
+          <div className="flex-1 min-w-[220px]">
+            <div className="relative">
+              <MagnifyingGlass className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                type="text"
+                placeholder="Buscar recomendação..."
+                className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pl-9 pr-3 text-sm text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
             {STATUS_FILTERS.map((filter) => (
               <button
                 key={filter.value}
                 type="button"
                 onClick={() => setStatusFilter(filter.value)}
-                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-all border ${
+                className={`h-10 rounded-full border px-4 text-xs font-semibold whitespace-nowrap transition-all ${
                   statusFilter === filter.value
                     ? 'bg-slate-900 text-white border-slate-900'
-                    : 'bg-white text-slate-600 border-slate-200 hover:border-slate-400'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                 }`}
               >
                 {filter.label}
@@ -150,7 +188,7 @@ const RecommendationsPage = () => {
             ))}
           </div>
         </div>
-      </header>
+      </section>
 
       {error && (
         <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -162,19 +200,19 @@ const RecommendationsPage = () => {
         <div className="flex justify-center py-20 text-gray-400 italic">
           Buscando recomendações personalizadas...
         </div>
-      ) : recommendations.length === 0 ? (
+      ) : filteredRecommendations.length === 0 ? (
         <section className="mt-4 rounded-2xl border-2 border-dashed border-emerald-200 bg-emerald-50/60 p-10 text-center">
           <h2 className="text-xl font-bold text-emerald-800 mb-2">Nenhuma recomendação aqui 🎉</h2>
           <p className="text-sm text-emerald-700 max-w-xl mx-auto">
             No momento você não possui conteúdos de reforço{' '}
             {statusFilter === 'pending'
               ? 'pendentes. Continue assim e siga com sua trilha de estudos!'
-              : 'neste filtro. Experimente mudar o status no topo da tela.'}
+              : 'neste filtro. Experimente mudar o status ou a busca no topo da tela.'}
           </p>
         </section>
       ) : (
         <section className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-2">
-          {recommendations.map((rec) => {
+          {filteredRecommendations.map((rec) => {
             const tags = rec.tags ?? []
 
             return (
