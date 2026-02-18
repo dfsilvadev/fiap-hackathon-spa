@@ -15,6 +15,7 @@ import RecommendationsPage from '@/pages/recommendations'
 import HomePage from '@/pages/homePage'
 import SignInPage from '@/pages/sign-in'
 import ProfilePage from '@/pages/profilePage'
+import StudentTrailsPage from '@/pages/student-trails'
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
           {
             path: RoutePaths.PERFIL.replace('/', ''),
             element: <ProfilePage />,
+          },
+          {
+            path: RoutePaths.STUDENT_TRIALS.replace('/', ''),
+            element: <StudentTrailsPage />,
           },
         ],
       },

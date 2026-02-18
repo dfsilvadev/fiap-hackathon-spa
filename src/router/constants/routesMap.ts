@@ -14,6 +14,7 @@ const Routes = {
   QUESTION: '/avaliacoes/estudante/:id',
 
   RECOMMENDATIONS: '/recomendacoes',
+  MINHASTRILHAS: '/minhas-trilhas',
 
   NOT_FOUND: '*',
 } as const
