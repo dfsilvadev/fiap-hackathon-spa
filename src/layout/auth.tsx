@@ -8,7 +8,7 @@ const Auth = () => {
         <div className="flex flex-row">
           <HorizontalLogo
             sizeIcon={24}
-            sizeText={20}
+            sizeText={38}
             textColor="#FFFFFF"
             iconColor="#FFFFFF"
             bgColor="#4F6FC4"
