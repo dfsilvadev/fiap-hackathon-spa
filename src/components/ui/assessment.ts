@@ -5,6 +5,7 @@ export interface Assessments {
   title: string
   description: string | null
   categoryId: string
+  grade?: string
   level: string
   minScore: unknown
   startDate: Date

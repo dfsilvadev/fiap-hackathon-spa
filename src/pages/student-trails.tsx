@@ -144,6 +144,10 @@ const StudentTrailsPage = () => {
                   item.category?.name === subjectName
               ) ?? null
 
+            if (!lp) {
+              return null
+            }
+
             const categoryCompleted =
               lp?.contents?.filter((c) => c.status === 'completed').length ?? 0
             const categoryTotal = lp?.contents?.length ?? 0
@@ -157,12 +161,10 @@ const StudentTrailsPage = () => {
                   <div>
                     <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                       <BookOpen size={18} className="text-slate-600" />
-                      {lp ? lp.category.name : subjectName}
+                      {lp.category.name}
                     </h2>
                     <p className="text-xs text-slate-500 mt-1">
-                      {lp
-                        ? `Trilha de ${lp.category.name} • ${lp.grade}º Ano`
-                        : 'Nenhuma trilha disponível'}
+                      {`Trilha de ${lp.category.name} • ${lp.grade}º Ano`}
                     </p>
                   </div>
 

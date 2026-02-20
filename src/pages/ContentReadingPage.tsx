@@ -95,7 +95,8 @@ export default function ContentReadingPage() {
   const isCompleted = content?.userStatus?.completed || content?.userStatus?.progress === 100
   const recommendationAllowed =
     !isReinforcement || Boolean(recommendationState?.recommendationId) || hasRecommendation === true
-  const canComplete = Boolean(content) && !isBlocked && recommendationAllowed
+  const blockedByProgressRule = Boolean(isBlocked) && !recommendationAllowed
+  const canComplete = Boolean(content) && !blockedByProgressRule
 
   if (loadError) {
     return (
@@ -138,7 +139,7 @@ export default function ContentReadingPage() {
     if (!content) return
     if (!canComplete) {
       setCompleteError(
-        isBlocked
+        blockedByProgressRule
           ? 'Este conteúdo está bloqueado no momento.'
           : 'Conteúdo de reforço só pode ser concluído por recomendação.'
       )

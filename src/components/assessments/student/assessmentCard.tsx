@@ -1,10 +1,11 @@
-import { Clock, Target, CaretRight } from '@phosphor-icons/react'
+import { CaretRight, Clock, Target } from '@phosphor-icons/react'
 import { categoryConfig } from '../../../constant/category'
 
 interface AssessmentCardProps {
   id: string
   title: string
   description: string
+  grade: string
   level: string
   category: string
   startDate: string
@@ -16,6 +17,7 @@ interface AssessmentCardProps {
 export const AssessmentCard = ({
   id,
   description,
+  grade,
   level,
   category,
   title,
@@ -34,6 +36,9 @@ export const AssessmentCard = ({
             className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded ${color.bg} ${color.text}`}
           >
             {category}
+          </span>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-[#475569] bg-[#F1F5F9] px-2 py-1 rounded">
+            Ano {grade}
           </span>
           <span className="text-[10px] font-bold uppercase tracking-widest text-[#475569] bg-[#F1F5F9] px-2 py-1 rounded">
             Nível {level}

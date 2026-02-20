@@ -11,7 +11,9 @@ export interface AssessmentListItem {
   title: string
   description: string | null
   categoryId: string
+  contentId?: string
   category?: AssessmentCategory
+  grade: string
   level: string
   minScore?: number
   startDate: string
@@ -51,11 +53,14 @@ export interface AssessmentsListResponse {
 export interface CreateAssessmentPayload {
   title: string
   categoryId: string
+  contentId: string
+  grade: string
   level: string
   startDate: string
   description?: string
   minScore?: number
   endDate?: string
+  isActive?: boolean
 }
 
 export interface UpdateAssessmentPayload {

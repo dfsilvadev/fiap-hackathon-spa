@@ -25,6 +25,7 @@ export const AssessmentList = ({ data, onStartItem }: AssessmentListProps) => {
           category={item.category?.name || 'Geral'}
           title={item.title}
           description={item.description || 'Sem descrição disponível.'}
+          grade={item.grade || '—'}
           level={item.level}
           minScore={item.minScore ? String(item.minScore) : '0'}
           startDate={formatDate(item.startDate)}

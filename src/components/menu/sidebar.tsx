@@ -1,9 +1,9 @@
-import { useNavigate, useLocation } from 'react-router'
-import { UserCircle, SignOut } from '@phosphor-icons/react'
+import { SignOut, UserCircle } from '@phosphor-icons/react'
+import { useLocation, useNavigate } from 'react-router'
 import { useAuth } from '../../hooks/useAuth'
-import HorizontalLogo from '../logo/horizontalLogo'
 import { Routes } from '../../router/constants/routesMap'
 import { RolesRoutes, UserRole } from '../../router/private/rolesRoutes'
+import HorizontalLogo from '../logo/horizontalLogo'
 
 export default function Sidebar() {
   const navigate = useNavigate()
@@ -18,13 +18,16 @@ export default function Sidebar() {
     <div className="flex">
       <aside className="fixed top-0 left-0 h-screen w-64 bg-white border-r border-gray-100 text-[#4B5563] flex flex-col">
         <div className="my-6 pb-4 border-b border-gray-150 px-5">
-          <HorizontalLogo
-            sizeIcon={24}
-            sizeText={20}
-            textColor="#000"
-            iconColor="#FFFFFF"
-            bgColor="#2563EB"
-          />
+          <div className="w-[92%]">
+            <HorizontalLogo
+              sizeIcon={24}
+              sizeText={34}
+              textColor="#000"
+              iconColor="#FFFFFF"
+              bgColor="#2563EB"
+              fitContainer
+            />
+          </div>
         </div>
 
         <div className="px-5 flex-grow overflow-y-auto">
