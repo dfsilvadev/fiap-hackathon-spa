@@ -24,7 +24,7 @@ const Auth = () => {
           </p>
         </div>
         <p className="text-white text-sm font-light">
-          © 2026 EduPlatform. Todos os direitos reservados.
+          © 2026 Plataforma Evolui. Todos os direitos reservados.
         </p>
       </div>
       <div className="w-1/2 bg-[#F8F9FA]">

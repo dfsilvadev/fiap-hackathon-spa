@@ -14,7 +14,7 @@ export const HorizontalLogo = ({ sizeText, fitContainer = false }: HorizontalLog
     <div className={`flex items-center ${fitContainer ? 'w-full' : ''}`}>
       <img
         src={logo}
-        alt="EduPlatform"
+        alt="Plataforma Evolui"
         className={fitContainer ? 'w-full h-auto' : ''}
         style={fitContainer ? undefined : { height: `${sizeText}px`, width: 'auto' }}
       />

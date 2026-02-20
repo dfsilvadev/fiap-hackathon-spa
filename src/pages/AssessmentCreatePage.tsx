@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { getTeacherSubjects } from '@/resources/teacherSubjectsResources'
 import { Routes } from '@/router/constants/routesMap'
 import { assessmentService } from '@/services/assessmentService'
-import { contentService, type CategoryDto } from '@/services/contentService'
+import { contentService, type CategoryDto, type Content } from '@/services/contentService'
 
 const allowedRoles = ['teacher', 'coordinator']
 
@@ -32,6 +32,12 @@ const emptyQuestion = (): QuestionDraft => ({
   tagInput: '',
 })
 
+const getNowLocalDateTime = () => {
+  const now = new Date()
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset())
+  return now.toISOString().slice(0, 16)
+}
+
 export default function AssessmentCreatePage() {
   const navigate = useNavigate()
   const { isLoggedIn, me } = useAuth()
@@ -43,10 +49,14 @@ export default function AssessmentCreatePage() {
 
   const [title, setTitle] = useState('')
   const [categoryId, setCategoryId] = useState('')
+  const [contentId, setContentId] = useState('')
   const [grade, setGrade] = useState('')
   const [level, setLevel] = useState('')
   const [description, setDescription] = useState('')
   const [minScore, setMinScore] = useState(70)
+  const [startDate, setStartDate] = useState(getNowLocalDateTime())
+  const [endDate, setEndDate] = useState('')
+  const [contents, setContents] = useState<Content[]>([])
   const [questions, setQuestions] = useState<QuestionDraft[]>([emptyQuestion()])
 
   useEffect(() => {
@@ -76,6 +86,36 @@ export default function AssessmentCreatePage() {
     }
     load()
   }, [me])
+
+  useEffect(() => {
+    if (!categoryId || !grade) {
+      setContents([])
+      setContentId('')
+      return
+    }
+
+    const loadContents = async () => {
+      try {
+        const res = await contentService.getContents({
+          categoryId,
+          grade,
+          level: level || undefined,
+          isActive: true,
+          page: 1,
+          limit: 100,
+        })
+        setContents(res.contents)
+        setContentId((current) =>
+          res.contents.some((content) => content.id === current) ? current : ''
+        )
+      } catch {
+        setContents([])
+        setContentId('')
+      }
+    }
+
+    void loadContents()
+  }, [categoryId, grade, level])
 
   const addQuestion = () => {
     setQuestions((prev) => [...prev, emptyQuestion()])
@@ -134,8 +174,8 @@ export default function AssessmentCreatePage() {
     e.preventDefault()
     setError(null)
     setForbiddenMessage(null)
-    if (!title.trim() || !categoryId || !level) {
-      setError('Preencha título, matéria e nível.')
+    if (!title.trim() || !categoryId || !contentId || !grade || !level) {
+      setError('Preencha título, matéria, conteúdo, ano letivo e nível.')
       return
     }
     const min = Number(minScore)
@@ -143,15 +183,27 @@ export default function AssessmentCreatePage() {
       setError('Nota mínima deve ser entre 0 e 100.')
       return
     }
+    if (!startDate) {
+      setError('Preencha a data de início.')
+      return
+    }
+    if (endDate && new Date(endDate) < new Date(startDate)) {
+      setError('A data final deve ser maior que a data de início.')
+      return
+    }
     try {
       setSaving(true)
       const created = await assessmentService.create({
         title: title.trim(),
         categoryId,
+        contentId,
+        grade,
         level,
-        startDate: new Date().toISOString(),
+        startDate: new Date(startDate).toISOString(),
+        endDate: endDate ? new Date(endDate).toISOString() : undefined,
         description: description.trim() || undefined,
         minScore: min,
+        isActive: true,
       })
       for (let i = 0; i < questions.length; i++) {
         const q = questions[i]
@@ -247,6 +299,29 @@ export default function AssessmentCreatePage() {
                 </select>
               </div>
               <div>
+                <label className="mb-1 block text-sm font-semibold text-slate-700">
+                  Conteúdo <span className="text-red-500">*</span>
+                </label>
+                <select
+                  value={contentId}
+                  onChange={(e) => setContentId(e.target.value)}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:bg-slate-100"
+                  required
+                  disabled={!categoryId || !grade || contents.length === 0}
+                >
+                  <option value="">
+                    {!categoryId || !grade
+                      ? 'Selecione matéria e ano letivo primeiro'
+                      : 'Selecione o conteúdo'}
+                  </option>
+                  {contents.map((content) => (
+                    <option key={content.id} value={content.id}>
+                      {content.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
                 <label className="mb-1 block text-sm font-semibold text-slate-700">Descrição</label>
                 <textarea
                   value={description}
@@ -258,13 +333,16 @@ export default function AssessmentCreatePage() {
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-sm font-semibold text-slate-700">Série</label>
+                  <label className="mb-1 block text-sm font-semibold text-slate-700">
+                    Ano letivo <span className="text-red-500">*</span>
+                  </label>
                   <select
                     value={grade}
                     onChange={(e) => setGrade(e.target.value)}
                     className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    required
                   >
-                    <option value="">Selecione a série</option>
+                    <option value="">Selecione o ano letivo</option>
                     {CONTENT_GRADE_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>
                         {o.label}
@@ -304,6 +382,31 @@ export default function AssessmentCreatePage() {
                   className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                 />
               </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="mb-1 block text-sm font-semibold text-slate-700">
+                    Data de início <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-sm font-semibold text-slate-700">
+                    Data final
+                  </label>
+                  <input
+                    type="datetime-local"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -341,7 +444,7 @@ export default function AssessmentCreatePage() {
                   <div className="space-y-4">
                     <div>
                       <label className="mb-1 block text-sm font-medium text-slate-700">
-                        Enunciado
+                        Enunciado <span className="text-red-500">*</span>
                       </label>
                       <textarea
                         value={q.questionText}
@@ -354,7 +457,7 @@ export default function AssessmentCreatePage() {
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div>
                         <label className="mb-1 block text-sm font-medium text-slate-700">
-                          Tipo
+                          Tipo <span className="text-red-500">*</span>
                         </label>
                         <select
                           value={q.questionType}
@@ -391,16 +494,7 @@ export default function AssessmentCreatePage() {
                         <div className="space-y-2">
                           {(q.options || ['', '', '', '']).map((opt, optIndex) => (
                             <div key={optIndex} className="flex items-center gap-3">
-                              <input
-                                type="radio"
-                                name={`q-${index}-correct`}
-                                checked={
-                                  (q.correctAnswer || '').trim().toLowerCase() ===
-                                  opt.trim().toLowerCase()
-                                }
-                                onChange={() => updateQuestion(index, 'correctAnswer', opt)}
-                                className="h-4 w-4 border-slate-300 text-blue-600 focus:ring-blue-500"
-                              />
+                              <span className="text-sm text-slate-500 w-6">{optIndex + 1}.</span>
                               <input
                                 type="text"
                                 value={opt}
@@ -415,7 +509,7 @@ export default function AssessmentCreatePage() {
                     )}
                     <div>
                       <label className="mb-1 block text-sm font-medium text-slate-700">
-                        Resposta correta
+                        Resposta correta <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
